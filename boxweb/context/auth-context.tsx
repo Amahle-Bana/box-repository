@@ -66,9 +66,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 'Authorization': `Bearer ${jwtToken}`
             } : {}
         })
-            .then(response => {
+            .then(async response => {
                 if (response.ok) {
                     return response.json();
+                }
+                // If response is not ok, clear token and throw error
+                // This handles cases where JWT exists but user is unverified or token is invalid
+                if (jwtToken) {
+                    localStorage.removeItem('jwt_token');
                 }
                 throw new Error('Authentication failed');
             })
@@ -118,6 +123,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 console.log("-----------Redux Structure Value: ", userData.structure)
             })
             .catch(() => {
+                // Clear auth state and token if verification fails
+                // This handles: expired tokens, invalid tokens, unverified users, network errors
                 setIsAuthenticated(false);
                 setEmailVerified(false);
                 setUsername(null);
@@ -273,6 +280,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({ email, otp_code: otpCode }),
         })
             .then(async response => {
@@ -283,6 +291,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         success: false,
                         message: content.error || 'OTP verification failed. Please try again.',
                     };
+                }
+
+                // Store JWT token in localStorage if provided by backend
+                if (content.jwt) {
+                    localStorage.setItem('jwt_token', content.jwt);
                 }
 
                 return {
@@ -358,6 +371,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             
             // Clear local state regardless of server response
             setIsAuthenticated(false);
+            setEmailVerified(false);
             setUsername(null);
             dispatch(setUser({})); // Clear user data in Redux
             localStorage.removeItem('jwt_token'); // Clear stored token
@@ -369,6 +383,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             console.error('Error during logout:', error);
             // Still clear local state even if request fails
             setIsAuthenticated(false);
+            setEmailVerified(false);
             setUsername(null);
             dispatch(setUser({}));
             localStorage.removeItem('jwt_token');

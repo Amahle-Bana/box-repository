@@ -87,7 +87,12 @@ export function LoginForm({
         // Login Function (From Auth Provider)
         login(trimmedEmail, trimmedPassword)
             .then(result => {
-                if (result.success) {
+                if (result.success && result.otpRequired) {
+                    // Redirect to OTP verification page with email parameter
+                    const targetEmail = result.email || trimmedEmail;
+                    router.push(`/authentication/otp?email=${encodeURIComponent(targetEmail)}&mode=login`);
+                } else if (result.success) {
+                    // Fallback: in case backend ever returns a direct success without OTP
                     router.push('/dashboard');
                 } else {
                     setErrorMessage(result.message);

@@ -187,7 +187,7 @@ export default function ChatPage() {
                                 {currentUser.fullName ? (
                                     <div 
                                         onClick={() => setIsUserSidebarOpen(true)} 
-                                        className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xl"
+                                        className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-xl"
                                     >
                                         {currentUser.fullName.charAt(0).toUpperCase()}
                                     </div>
@@ -201,7 +201,7 @@ export default function ChatPage() {
                                 ) : (
                                     <div 
                                         onClick={() => setIsUserSidebarOpen(true)} 
-                                        className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer"
+                                        className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer"
                                     >
                                         {currentUser.username.charAt(0).toUpperCase()}
                                     </div>

@@ -8,9 +8,7 @@ import Link from 'next/link';
 import { Settings, Info, MoreHorizontal } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Mail } from 'lucide-react';
-import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Carousel, Card } from '@/components/ui/apple-cards-carousel';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -79,8 +77,6 @@ export default function AddPage() {
     const articlesScrollRefSaved1 = useRef<HTMLDivElement>(null);
     const articlesScrollRefSaved2 = useRef<HTMLDivElement>(null);
     const [activeTab, setActiveTab] = useState("all");
-    const [mounted, setMounted] = useState(false);
-    const { setTheme } = useTheme();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
 
@@ -184,7 +180,6 @@ export default function AddPage() {
     };
 
     useEffect(() => {
-        setMounted(true);
         fetchParties(); // Fetch parties when component mounts
     }, []);
 
@@ -504,32 +499,17 @@ export default function AddPage() {
             <header className="fixed top-0 left-0 right-0 z-50 bg-background">
                 <div className="flex items-center justify-between px-6 py-4 bg-background">
 
-                    {/* Right - Buttons */}
+                    {/* Right - Back button */}
                     <div className="flex items-center gap-2">
-
-                        {/* Theme Toggle */}
-                        {mounted && (
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon" className="cursor-pointer">
-                                        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 cursor-pointer" />
-                                        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 cursor-pointer" />
-                                        <span className="sr-only">Toggle theme</span>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-background">
-                                    <DropdownMenuItem onClick={() => setTheme("light")}>
-                                        Light
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setTheme("dark")}>
-                                        Dark
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setTheme("system")}>
-                                        System
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="cursor-pointer"
+                            onClick={() => router.back()}
+                            aria-label="Go back"
+                        >
+                            <ChevronLeftIcon className="h-5 w-5" />
+                        </Button>
                     </div>
                 </div>
             </header>

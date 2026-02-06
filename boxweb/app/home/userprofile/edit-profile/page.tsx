@@ -501,7 +501,7 @@ export default function EditProfile() {
                                             <div className="relative w-24 h-24 rounded-full overflow-hidden border border-blue-500">
 
                                                 {currentUser.profilePicture === null ?
-                                                    <div className="flex flex-row text-blue-500 items-center justify-center text-5xl font-bold h-[100%]">{currentUser.username.charAt(0).toUpperCase()}</div>
+                                                    <div className="flex flex-row bg-blue-50 dark:bg-blue-900/20 text-blue-500 items-center justify-center text-5xl font-bold h-[100%] w-full">{currentUser.username.charAt(0).toUpperCase()}</div>
                                                     :
                                                     <Image
                                                         src={currentUser.profilePicture}

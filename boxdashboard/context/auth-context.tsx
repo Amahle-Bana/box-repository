@@ -9,12 +9,25 @@ import { setUser } from '../redux/user-store/userSlice';
 // Auth Context Type Variables
 interface AuthContextType {
     isAuthenticated: boolean;
+    emailVerified: boolean;
     username: string | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+    login: (
+        email: string,
+        password: string
+    ) => Promise<{ success: boolean; message: string; otpRequired?: boolean; email?: string }>;
     logout: () => Promise<void>;
-    signup: (username: string, email: string, password: string, fullName?: string) => Promise<{ success: boolean; message: string }>;
+    signup: (
+        username: string,
+        email: string,
+        password: string,
+        fullName?: string,
+        structure?: string
+    ) => Promise<{ success: boolean; message: string; email?: string }>;
     checkExistingUserData: (username: string, email: string) => Promise<{ success: boolean; message: string; errors?: string[] }>;
+    verifyOTP: (email: string, otpCode: string) => Promise<{ success: boolean; message: string }>;
+    resendOTP: (email: string) => Promise<{ success: boolean; message: string }>;
+    refreshUserData: () => Promise<void>;
 }
 
 
@@ -27,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // State Variables
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(false);
     const [username, setUsername] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -52,17 +66,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 'Authorization': `Bearer ${jwtToken}`
             } : {}
         })
-            .then(response => {
+            .then(async response => {
                 if (response.ok) {
                     return response.json();
+                }
+                // If response is not ok, clear token and throw error
+                // This handles cases where JWT exists but user is unverified or token is invalid
+                if (jwtToken) {
+                    localStorage.removeItem('jwt_token');
                 }
                 throw new Error('Authentication failed');
             })
             .then(content => {
-                setIsAuthenticated(true);
-                setUsername(content.username);
-                
-                // console.log("---------User Content: ", content)
+                const isVerified = !!content.is_email_verified;
+
+                setEmailVerified(isVerified);
+                setIsAuthenticated(isVerified);
+                setUsername(isVerified ? content.username : null);
+
+                console.log("---------User Content: ", content)
 
                 // Update Redux store with user details that match userSlice
                 const userData = {
@@ -92,10 +114,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 };
 
                 dispatch(setUser(userData));
-                // console.log("-----------User Data: ", userData)
+                console.log("-----------User Data: ", userData)
             })
             .catch(() => {
+                // Clear auth state and token if verification fails
+                // This handles: expired tokens, invalid tokens, unverified users, network errors
                 setIsAuthenticated(false);
+                setEmailVerified(false);
                 setUsername(null);
                 dispatch(setUser({})); // Clear user data in Redux
                 localStorage.removeItem('jwt_token'); // Clear stored token
@@ -119,27 +144,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
         })
             .then(async response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const content = await response.json();
-                if (content.username) {
-                    // Store JWT token in localStorage as fallback
-                    if (content.jwt) {
-                        localStorage.setItem('jwt_token', content.jwt);
-                    }
+                const content = await response.json().catch(() => ({}));
 
-                    // Skip verification for now
-                    setIsAuthenticated(true);
-                    setUsername(content.username);
-                    await checkAuthStatus();
-                    return { success: true, message: content.message || 'Login successful' };
-                } else {
+                if (!response.ok) {
                     return {
                         success: false,
-                        message: content.error || 'Login failed. Please check your credentials.'
+                        message: content.error || 'Login failed. Please check your credentials.',
                     };
                 }
+
+                if (content.otp_required) {
+                    // Credentials are correct and OTP has been sent.
+                    // Do NOT mark the user as authenticated yet.
+                    return {
+                        success: true,
+                        message: content.message || 'OTP sent to your email. Please verify to continue.',
+                        otpRequired: true,
+                        email: content.email || trimmedEmail,
+                    };
+                }
+
+                // Fallback: unexpected successful response without otp_required
+                return {
+                    success: false,
+                    message: content.error || 'Unexpected login response. Please try again.',
+                };
             })
             .catch((error) => {
                 console.error('Login error:', error);
@@ -307,6 +336,101 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             });
     };
 
+    // Verify OTP Function
+    const verifyOTP = (email: string, otpCode: string) => {
+        const baseUrl = process.env.NEXT_PUBLIC_VERIFY_OTP || 'http://localhost:8000';
+        return fetch(`${baseUrl}/somaapp/verify-otp/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ email, otp_code: otpCode }),
+        })
+            .then(async response => {
+                const content = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    return {
+                        success: false,
+                        message: content.error || 'OTP verification failed. Please try again.',
+                    };
+                }
+
+                // Store JWT token in localStorage if provided by backend
+                if (content.jwt) {
+                    localStorage.setItem('jwt_token', content.jwt);
+                }
+
+                return {
+                    success: true,
+                    message: content.message || 'OTP verified successfully.',
+                };
+            })
+            .catch(error => {
+                return {
+                    success: false,
+                    message: 'Network error occurred. Please check your connection and try again.'
+                };
+            });
+    };
+
+    // Resend OTP Function
+    const resendOTP = (email: string) => {
+        const baseUrl = process.env.NEXT_PUBLIC_RESEND_OTP || 'http://localhost:8000';
+        return fetch(`${baseUrl}/somaapp/signup/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                resend: true // Flag to indicate this is a resend request
+            }),
+        })
+            .then(async response => {
+                if (!response.ok) {
+                    try {
+                        const errorData = await response.json();
+                        return {
+                            success: false,
+                            message: errorData.error || 'Failed to resend OTP. Please try again.'
+                        };
+                    } catch (parseError) {
+                        return {
+                            success: false,
+                            message: 'Failed to resend OTP. Please try again.'
+                        };
+                    }
+                }
+                return response.json();
+            })
+            .then(content => {
+                if (!content.message) {
+                    return {
+                        success: false,
+                        message: content.error || 'Failed to resend OTP. Please try again.'
+                    };
+                }
+                return {
+                    success: true,
+                    message: 'OTP sent successfully!'
+                };
+            })
+            .catch(error => {
+                return {
+                    success: false,
+                    message: 'Network error occurred. Please check your connection and try again.'
+                };
+            });
+    };
+
+    // Refresh User Data Function
+    const refreshUserData = async () => {
+        console.log("Manually refreshing user data...");
+        await checkAuthStatus();
+    };
+
     // Logout Function
     const logout = async () => {
         try {
@@ -317,6 +441,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             
             // Clear local state regardless of server response
             setIsAuthenticated(false);
+            setEmailVerified(false);
             setUsername(null);
             dispatch(setUser({})); // Clear user data in Redux
             localStorage.removeItem('jwt_token'); // Clear stored token
@@ -328,6 +453,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             console.error('Error during logout:', error);
             // Still clear local state even if request fails
             setIsAuthenticated(false);
+            setEmailVerified(false);
             setUsername(null);
             dispatch(setUser({}));
             localStorage.removeItem('jwt_token');
@@ -343,7 +469,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Return Auth Provider
     return (
-        <AuthContext.Provider value={{ isAuthenticated, username, loading, login, logout, signup, checkExistingUserData }}>
+        <AuthContext.Provider
+            value={{
+                isAuthenticated,
+                emailVerified,
+                username,
+                loading,
+                login,
+                logout,
+                signup,
+                checkExistingUserData,
+                verifyOTP,
+                resendOTP,
+                refreshUserData,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

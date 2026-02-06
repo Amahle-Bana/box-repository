@@ -689,7 +689,7 @@ export default function MagazinesPage() {
                                                     className="bg-background rounded-lg p-6 shadow-sm border hover:shadow-md transition-all cursor-pointer"
                                                 >
                                                     <div className="flex items-center gap-4 mb-4">
-                                                        <div className={`w-16 h-16 rounded-full overflow-hidden ${colors.bg} flex items-center justify-center`}>
+                                                        <div className="w-16 h-16 rounded-full overflow-hidden bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
                                                             {party.logo ? (
                                                                 <img
                                                                     src={party.logo}
@@ -703,7 +703,7 @@ export default function MagazinesPage() {
                                                                     }}
                                                                 />
                                                             ) : null}
-                                                            <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center ${colors.accent} font-bold text-xl`}>
+                                                            <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center text-blue-500 font-bold text-xl`}>
                                                                 {party.party_name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
                                                             </div>
                                                         </div>
@@ -784,7 +784,7 @@ export default function MagazinesPage() {
                                                                 className="bg-background rounded-lg p-6 shadow-sm border hover:shadow-md transition-all cursor-pointer"
                                                             >
                                                                 <div className="flex items-center gap-4 mb-4">
-                                                                    <div className={`w-16 h-16 rounded-full overflow-hidden ${colors.bg} flex items-center justify-center`}>
+                                                                    <div className="w-16 h-16 rounded-full overflow-hidden bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
                                                                         {party.logo ? (
                                                                             <img
                                                                                 src={party.logo}
@@ -798,7 +798,7 @@ export default function MagazinesPage() {
                                                                                 }}
                                                                             />
                                                                         ) : null}
-                                                                        <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center ${colors.accent} font-bold text-xl`}>
+                                                                        <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center text-blue-500 font-bold text-xl`}>
                                                                             {party.party_name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
                                                                         </div>
                                                                     </div>
@@ -880,7 +880,7 @@ export default function MagazinesPage() {
                                                                 className="bg-background rounded-lg p-6 shadow-sm border hover:shadow-md transition-all cursor-pointer"
                                                             >
                                                                 <div className="flex items-center gap-4 mb-4">
-                                                                    <div className={`w-16 h-16 rounded-full overflow-hidden ${colors.bg} flex items-center justify-center`}>
+                                                                    <div className="w-16 h-16 rounded-full overflow-hidden bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
                                                                         {party.logo ? (
                                                                             <img
                                                                                 src={party.logo}
@@ -894,7 +894,7 @@ export default function MagazinesPage() {
                                                                                 }}
                                                                             />
                                                                         ) : null}
-                                                                        <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center ${colors.accent} font-bold text-xl`}>
+                                                                        <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center text-blue-500 font-bold text-xl`}>
                                                                             {party.party_name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
                                                                         </div>
                                                                     </div>
@@ -1062,7 +1062,7 @@ export default function MagazinesPage() {
                                                 {rank}
                                             </div>
                                             <div className="flex items-center gap-3 flex-1">
-                                                <div className={`w-10 h-10 rounded-full overflow-hidden ${partyColors.bg} flex items-center justify-center`}>
+                                                <div className="w-10 h-10 rounded-full overflow-hidden bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
                                                     {party.logo ? (
                                                         <img
                                                             src={party.logo}
@@ -1076,7 +1076,7 @@ export default function MagazinesPage() {
                                                             }}
                                                         />
                                                     ) : null}
-                                                    <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center ${partyColors.accent} font-bold text-xs`}>
+                                                    <div className={`${party.logo ? 'hidden' : ''} w-full h-full flex items-center justify-center text-blue-500 font-bold text-xs`}>
                                                         {shortName.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
                                                     </div>
                                                 </div>

@@ -109,7 +109,7 @@ export default function HomeLayout({
                                 <div className="cursor-pointer">
                                     {currentUser.profilePicture === null ? (
                                         <div
-                                            className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xl hover:bg-secondary/80 transition-colors"
+                                            className="h-12 w-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-2xl hover:opacity-90 transition-opacity"
                                         >
                                             {currentUser.username.charAt(0).toUpperCase()}
                                         </div>
@@ -117,7 +117,7 @@ export default function HomeLayout({
                                         <img
                                             src={currentUser.profilePicture}
                                             alt="Profile"
-                                            className="h-10 w-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                                            className="h-12 w-12 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
                                         />
                                     )}
                                 </div>
@@ -188,7 +188,7 @@ export default function HomeLayout({
                                                         {currentUser.profilePicture === null ? (
                                                             <div
                                                                 onClick={() => setProfileSheetOpen(true)}
-                                                                className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xl"
+                                                                className="h-12 w-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-2xl"
                                                             >
                                                                 {currentUser.username.charAt(0).toUpperCase()}
                                                             </div>
@@ -197,7 +197,7 @@ export default function HomeLayout({
                                                                 src={currentUser.profilePicture}
                                                                 alt="Profile"
                                                                 onClick={() => setProfileSheetOpen(true)}
-                                                                className="h-10 w-10 rounded-full object-cover cursor-pointer"
+                                                                className="h-12 w-12 rounded-full object-cover cursor-pointer"
                                                             />
                                                         )}
                                                         <div className="flex flex-col">
@@ -312,7 +312,7 @@ export default function HomeLayout({
                                 <div key={item.name} className="relative">
                                     <Link
                                         href={item.href}
-                                        className={`flex flex-col items-center justify-center p-2 rounded-lg w-15 h-15 ${isPost
+                                        className={`flex flex-col items-center justify-center p-2 rounded-lg w-15 h-10 ${isPost
                                             ? 'text-white bg-[rgb(59,130,246)] hover:bg-[rgb(37,99,235)]'
                                             : isActive
                                                 ? 'text-blue-500'
@@ -329,14 +329,14 @@ export default function HomeLayout({
                             <DropdownMenuTrigger asChild>
                                 <div className="cursor-pointer p-2">
                                     {currentUser.profilePicture === null ? (
-                                        <div className="h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xs hover:bg-secondary/80 transition-colors">
+                                        <div className="h-9 w-9 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-sm hover:opacity-90 transition-opacity">
                                             {currentUser.username.charAt(0).toUpperCase()}
                                         </div>
                                     ) : (
                                         <img
                                             src={currentUser.profilePicture}
                                             alt="Profile"
-                                            className="h-6 w-6 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                                            className="h-9 w-9 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
                                         />
                                     )}
                                 </div>

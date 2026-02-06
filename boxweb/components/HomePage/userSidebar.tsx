@@ -1,5 +1,5 @@
 import { UserCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { GalleryVerticalEnd, Settings, HelpCircle, LogOut, Library, Gift, Users, Link as LinkIcon, Mic, FileText, Book } from "lucide-react";
+import { LogOut, Users, Flag, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "../../context/auth-context";
 import { motion } from "framer-motion";
@@ -43,7 +43,7 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
                         <p className="text-sm text-gray-600 text-center">
                             Create an account or login to access your profile and settings.
                         </p>
-                        <Link href="/login" className="w-full flex justify-center">
+                        <Link href="/authentication" className="w-full flex justify-center">
                             <Button 
                                 className="w-[160px] bg-secondary text-white hover:bg-secondary/90 cursor-pointer"
                                 onClick={onClose}
@@ -56,13 +56,11 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
                     <>
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b">
-                            <Link href="/home/profile" className="flex items-center gap-2 p-2 hover:bg-muted rounded-md">
                                 <UserCircleIcon className="h-8 w-8 text-primary" />
                                 <div className="flex flex-col">
                                     <span className="text-sm font-semibold">@{currentUser.username}</span>
                                     <span className="text-xs text-gray-500">{currentUser.email}</span>
                                 </div>
-                            </Link>
                             <button onClick={onClose} className="p-1 hover:bg-muted rounded-full">
                                 <XMarkIcon className="h-6 w-6" />
                             </button>
@@ -70,58 +68,19 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
 
                         {/* Content */}
                         <div className="flex-1 overflow-y-auto">
-                            <div className="space-y-2">
-                                {/* Profile Section */}
-                                <div className="p-2 border-b space-y-2">
-                                    <Link href="/home/library" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Library className="h-5 w-5 text-primary" />
-                                        <span>Library</span>
-                                    </Link>
-                                    <Link href="/stories" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <FileText className="h-5 w-5 text-primary" />
-                                        <span>Articles</span>
-                                    </Link>
-                                    <Link href="/stories" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Book className="h-5 w-5 text-primary" />
-                                        <span>Magazines</span>
-                                    </Link>
-                                    <Link href="/stories" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Mic className="h-5 w-5 text-primary" />
-                                        <span>Podcasts</span>
-                                    </Link>
-                                </div>
-
-                                {/* Account Management Section */}
-                                <div className="p-2 border-b space-y-2">
-                                    <Link href="/manage-publications" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <GalleryVerticalEnd className="h-5 w-5 text-primary" />
-                                        <span>Manage Publications</span>
-                                    </Link>
-                                    <Link href="/settings" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Settings className="h-5 w-5 text-primary" />
-                                        <span>Settings</span>
-                                    </Link>
-                                    <Link href="/help" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <HelpCircle className="h-5 w-5 text-primary" />
-                                        <span>Help</span>
-                                    </Link>
-                                </div>
-
-                                {/* Membership Section */}
-                                <div className="p-2 border-b space-y-2">
-                                    <Link href="/become-member" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Users className="h-5 w-5 text-primary" />
-                                        <span>Become A Member</span>
-                                    </Link>
-                                    <Link href="/gift-membership" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <Gift className="h-5 w-5 text-primary" />
-                                        <span>Gift A Membership</span>
-                                    </Link>
-                                    <Link href="/referral" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
-                                        <LinkIcon className="h-5 w-5 text-primary" />
-                                        <span>Referral Link</span>
-                                    </Link>
-                                </div>
+                            <div className="p-2 border-b space-y-2">
+                                <Link href="/home/popular-councillors" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
+                                    <Users className="h-5 w-5 text-primary" />
+                                    <span>Popular Councillors</span>
+                                </Link>
+                                <Link href="/home/top-parties" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
+                                    <Flag className="h-5 w-5 text-primary" />
+                                    <span>Top Parties</span>
+                                </Link>
+                                <Link href="/polls" className="flex items-center gap-3 p-2 hover:bg-muted rounded-md">
+                                    <BarChart3 className="h-5 w-5 text-primary" />
+                                    <span>Polls</span>
+                                </Link>
                             </div>
                         </div>
 
@@ -130,12 +89,12 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
                             <button
                                 onClick={async () => {
                                     await logout();
-                                    window.location.href = '/login';
+                                    window.location.href = '/authentication';
                                 }}
                                 className="flex items-center gap-3 p-2 hover:bg-muted rounded-md w-full text-left text-red-600"
                             >
                                 <LogOut className="h-5 w-5" />
-                                <span>Sign Out</span>
+                                <span>Logout</span>
                             </button>
                         </div>
                     </>

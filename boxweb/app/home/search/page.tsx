@@ -168,7 +168,7 @@ export default function SearchPage() {
                                             onClick={() => handlePostClick(post)}
                                         >
                                             <div className="flex items-center space-x-3 mb-3">
-                                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden">
+                                                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden">
                                                     {post.profile_picture ? (
                                                         <Image
                                                             src={post.profile_picture.startsWith('data:')
@@ -181,7 +181,7 @@ export default function SearchPage() {
                                                             className="w-full h-full object-cover rounded-full"
                                                         />
                                                     ) : (
-                                                        <span className="text-white">
+                                                        <span className="text-blue-500">
                                                             {(post.username || 'A')[0].toUpperCase()}
                                                         </span>
                                                     )}

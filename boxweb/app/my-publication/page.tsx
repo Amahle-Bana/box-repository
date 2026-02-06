@@ -211,7 +211,7 @@ export default function HomePage() {
                                 {currentUser.fullName ? (
                                     <div
                                         onClick={() => setIsUserSidebarOpen(true)}
-                                        className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xl"
+                                        className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-xl"
                                     >
                                         {currentUser.fullName.charAt(0).toUpperCase()}
                                     </div>
@@ -225,7 +225,7 @@ export default function HomePage() {
                                 ) : (
                                     <div
                                         onClick={() => setIsUserSidebarOpen(true)}
-                                        className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer"
+                                        className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer"
                                     >
                                         {currentUser.username.charAt(0).toUpperCase()}
                                     </div>
@@ -628,7 +628,7 @@ export default function HomePage() {
                                                     {currentUser.profilePicture ? (
                                                         <img src={currentUser.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                                                     ) : (
-                                                        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">
+                                                        <div className="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">
                                                             {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}
@@ -813,7 +813,7 @@ export default function HomePage() {
                                                     {currentUser.profilePicture ? (
                                                         <img src={currentUser.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                                                     ) : (
-                                                        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">
+                                                        <div className="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">
                                                             {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}
@@ -998,7 +998,7 @@ export default function HomePage() {
                                                     {currentUser.profilePicture ? (
                                                         <img src={currentUser.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                                                     ) : (
-                                                        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">
+                                                        <div className="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">
                                                             {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}
@@ -1134,7 +1134,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1144,7 +1144,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1154,7 +1154,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1218,7 +1218,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1228,7 +1228,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1238,7 +1238,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1260,7 +1260,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1270,7 +1270,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1280,7 +1280,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1326,7 +1326,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1336,7 +1336,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1346,7 +1346,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1390,7 +1390,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1400,7 +1400,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1410,7 +1410,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1454,7 +1454,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1464,7 +1464,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1474,7 +1474,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1518,7 +1518,7 @@ export default function HomePage() {
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JD</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JD</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">John Doe</h4>
                                                             <p className="text-sm text-muted-foreground">Tech Writer</p>
@@ -1528,7 +1528,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">JS</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">JS</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Jane Smith</h4>
                                                             <p className="text-sm text-muted-foreground">Content Creator</p>
@@ -1538,7 +1538,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">MJ</div>
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">MJ</div>
                                                         <div>
                                                             <h4 className="font-medium text-primary">Mike Johnson</h4>
                                                             <p className="text-sm text-muted-foreground">Publisher</p>
@@ -1653,7 +1653,7 @@ export default function HomePage() {
                                                     {currentUser.profilePicture ? (
                                                         <img src={currentUser.profilePicture} alt="Profile" className="h-8 w-8 rounded-full object-cover" />
                                                     ) : (
-                                                        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">
+                                                        <div className="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold">
                                                             {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}

@@ -324,7 +324,7 @@ export default function PostDetailsPage() {
                                                 alt={post.user_data.fullName || post.user_data.username}
                                             />
                                         ) : (
-                                            <AvatarFallback className="bg-secondary">
+                                            <AvatarFallback className="bg-blue-50 dark:bg-blue-900/20 text-blue-500">
                                                 {(post.user_data?.fullName || post.user_data?.username || 'U').charAt(0).toUpperCase()}
                                             </AvatarFallback>
                                         )}
@@ -519,7 +519,7 @@ export default function PostDetailsPage() {
                                                     alt={post.user_data.fullName || post.user_data.username}
                                                 />
                                             ) : (
-                                                <AvatarFallback className="bg-secondary">
+                                                <AvatarFallback className="bg-blue-50 dark:bg-blue-900/20 text-blue-500">
                                                     {(post.user_data?.fullName || post.user_data?.username || 'U').charAt(0).toUpperCase()}
                                                 </AvatarFallback>
                                             )}
@@ -554,7 +554,7 @@ export default function PostDetailsPage() {
                             <DrawerDescription>
                                 {post ? (
                                     <div className="flex items-center gap-3 mt-2">
-                                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                                        <div className="w-8 h-8 rounded-full overflow-hidden bg-blue-50 dark:bg-blue-900/20">
                                             {post.is_anonymous ? (
                                                 <div className="w-full h-full bg-gray-400 flex items-center justify-center text-white font-semibold text-sm">
                                                     ?
@@ -571,7 +571,7 @@ export default function PostDetailsPage() {
                                                     className="object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-sm">
+                                                <div className="w-full h-full flex items-center justify-center text-blue-500 font-semibold text-sm">
                                                     {(post.user_data?.fullName || post.user_data?.username || 'U').charAt(0).toUpperCase()}
                                                 </div>
                                             )}
@@ -613,7 +613,7 @@ export default function PostDetailsPage() {
                                                         className="object-cover"
                                                     />
                                                 ) : (
-                                                    <AvatarFallback className="bg-secondary">
+                                                    <AvatarFallback className="bg-blue-50 dark:bg-blue-900/20 text-blue-500">
                                                         {(comment.full_name || comment.username || 'U').charAt(0).toUpperCase()}
                                                     </AvatarFallback>
                                                 )}
@@ -645,7 +645,7 @@ export default function PostDetailsPage() {
                                 {isAuthenticated ? (
                                     <div className="flex gap-3">
                                         <Avatar className="w-8 h-8">
-                                            <AvatarFallback className="bg-secondary">
+                                            <AvatarFallback className="bg-blue-50 dark:bg-blue-900/20 text-blue-500">
                                                 {username ? username.charAt(0).toUpperCase() : 'U'}
                                             </AvatarFallback>
                                         </Avatar>

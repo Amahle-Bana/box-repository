@@ -159,7 +159,7 @@ export function SearchQueryDialog({
                                             onClick={() => handlePostClick(post)}
                                         >
                                             <div className="flex items-center space-x-2 mb-2">
-                                                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium">
+                                                <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-sm font-medium text-blue-500">
                                                     {post.profile_picture ? (
                                                         <img
                                                             src={post.profile_picture}

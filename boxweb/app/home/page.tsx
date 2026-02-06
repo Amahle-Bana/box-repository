@@ -1081,7 +1081,7 @@ export default function HomePage() {
                             {currentUser.fullName ? (
                                 <div
                                     onClick={() => setIsUserSidebarOpen(true)}
-                                    className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer text-xl"
+                                    className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer text-xl"
                                 >
                                     {currentUser.fullName.charAt(0).toUpperCase()}
                                 </div>
@@ -1095,7 +1095,7 @@ export default function HomePage() {
                             ) : (
                                 <div
                                     onClick={() => setIsUserSidebarOpen(true)}
-                                    className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold cursor-pointer"
+                                    className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold cursor-pointer"
                                 >
                                     {currentUser.username.charAt(0).toUpperCase()}
                                 </div>
@@ -1289,7 +1289,7 @@ export default function HomePage() {
                                                                 }}
                                                             />
                                                         ) : (
-                                                            <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-lg">
+                                                            <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-lg">
                                                                 {candidate.candidate_name.charAt(0).toUpperCase()}
                                                             </div>
                                                         )}
@@ -1343,11 +1343,11 @@ export default function HomePage() {
                                             className="object-cover"
                                         />
                                     ) : currentUser.fullName ? (
-                                        <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-lg">
+                                        <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-lg">
                                             {currentUser.fullName.charAt(0).toUpperCase()}
                                         </div>
                                     ) : (
-                                        <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-lg">
+                                        <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-lg">
                                             {currentUser.username.charAt(0).toUpperCase()}
                                         </div>
                                     )}
@@ -1473,7 +1473,7 @@ export default function HomePage() {
                                                         }}
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-lg">
+                                                    <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-lg">
                                                         {getUserDisplayName(post.user).charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
@@ -1764,7 +1764,7 @@ export default function HomePage() {
                                         {/* Party Title & Leader */}
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
+                                                <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-blue-50 dark:bg-blue-900/20">
                                                     {party.logo ? (
                                                         <Image
                                                             src={party.logo}
@@ -1774,11 +1774,9 @@ export default function HomePage() {
                                                             className="object-cover"
                                                         />
                                                     ) : (
-                                                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                                                            <span className="text-white text-xs font-bold">
-                                                                {party.party_name.charAt(0)}
-                                                            </span>
-                                                        </div>
+                                                        <span className="text-blue-500 text-xs font-bold">
+                                                            {party.party_name.charAt(0)}
+                                                        </span>
                                                     )}
                                                 </div>
                                                 <div>
@@ -1865,7 +1863,7 @@ export default function HomePage() {
                                                     className="object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-sm">
+                                                <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-sm">
                                                     {getUserDisplayName(selectedPostForComment.user).charAt(0).toUpperCase()}
                                                 </div>
                                             )}
@@ -1907,7 +1905,7 @@ export default function HomePage() {
                                                         className="object-cover"
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-full bg-secondary flex items-center justify-center text-white font-semibold text-sm">
+                                                    <div className="w-full h-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 font-semibold text-sm">
                                                         {(comment.full_name || comment.username || 'U').charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
@@ -1935,9 +1933,9 @@ export default function HomePage() {
                             </div>
 
                             {/* Add Comment Form */}
-                            <div className="mt-6 p-4 bg-gray-50 rounded-lg flex-shrink-0">
-                                <div className="flex gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white font-semibold text-sm">
+                            <div className="mt-6 p-4 bg-background rounded-lg flex-shrink-0">
+                                <div className="flex gap-3 background">
+                                    <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center text-blue-500 font-semibold text-sm">
                                         {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase()}
                                     </div>
                                     <div className="flex-1">
@@ -1945,7 +1943,7 @@ export default function HomePage() {
                                             placeholder="Write a comment..."
                                             value={commentText}
                                             onChange={(e) => setCommentText(e.target.value)}
-                                            className="w-full p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full p-3 border border-gray-200 rounded-lg bg-background resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                             rows={3}
                                         />
                                         <div className="flex justify-end mt-3">

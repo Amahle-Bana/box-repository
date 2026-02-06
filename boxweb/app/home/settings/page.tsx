@@ -589,7 +589,7 @@ export default function SettingsPage() {
                                                 {currentUser.profilePicture ? (
                                                     <Image src={currentUser.profilePicture} alt="Profile" fill className="object-cover" />
                                                 ) : (
-                                                    <div className="flex items-center justify-center w-full h-full text-blue-500 text-3xl font-bold">
+                                                    <div className="flex items-center justify-center w-full h-full bg-blue-50 dark:bg-blue-900/20 text-blue-500 text-3xl font-bold">
                                                         {currentUser.username?.charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
