@@ -1,10 +1,8 @@
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
 import { useEffect, useState } from "react"
 
-import { Badge } from "@/components/ui/badge"
 import {
     Card,
-    CardAction,
     CardDescription,
     CardFooter,
     CardHeader,
@@ -68,13 +66,12 @@ export function SectionCards() {
             })
 
             if (!response.ok) {
-                const errorText = await response.text()
-                console.error('Error response:', errorText)
+                await response.text()
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`)
             }
 
             const data = await response.json()
-            console.log('API response data:', data)
+            // console.log('API response data:', data)
 
             if (data.message === 'User statistics fetched successfully') {
                 setUserStats({
@@ -90,8 +87,8 @@ export function SectionCards() {
         } catch (err) {
             console.error('Error fetching user statistics:', err)
             if (response) {
-                console.error('Response status:', response.status)
-                console.error('Response statusText:', response.statusText)
+                // console.error('Response status:', response.status)
+                // console.error('Response statusText:', response.statusText)
             }
             setError(err instanceof Error ? err.message : 'Unknown error occurred')
             // Set fallback data on error
@@ -120,13 +117,12 @@ export function SectionCards() {
             })
 
             if (!response.ok) {
-                const errorText = await response.text()
-                console.error('Error response:', errorText)
+                await response.text()
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`)
             }
 
             const data = await response.json()
-            console.log('Party API response data:', data)
+            // console.log('Party API response data:', data)
 
             if (data.message === 'Party statistics fetched successfully') {
                 setPartyStats({
@@ -140,8 +136,8 @@ export function SectionCards() {
         } catch (err) {
             console.error('Error fetching party statistics:', err)
             if (response) {
-                console.error('Response status:', response.status)
-                console.error('Response statusText:', response.statusText)
+                // console.error('Response status:', response.status)
+                // console.error('Response statusText:', response.statusText)
             }
             // Set fallback data on error
             setPartyStats({
@@ -165,13 +161,12 @@ export function SectionCards() {
             })
 
             if (!response.ok) {
-                const errorText = await response.text()
-                console.error('Error response:', errorText)
+                await response.text()
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`)
             }
 
             const data = await response.json()
-            console.log('Candidate API response data:', data)
+            // console.log('Candidate API response data:', data)
 
             if (data.message === 'Candidate statistics fetched successfully') {
                 setCandidateStats({
@@ -185,8 +180,8 @@ export function SectionCards() {
         } catch (err) {
             console.error('Error fetching candidate statistics:', err)
             if (response) {
-                console.error('Response status:', response.status)
-                console.error('Response statusText:', response.statusText)
+                // console.error('Response status:', response.status)
+                // console.error('Response statusText:', response.statusText)
             }
             // Set fallback data on error
             setCandidateStats({
@@ -208,7 +203,7 @@ export function SectionCards() {
                     fetchCandidateStats()
                 ])
             } catch (error) {
-                console.error('Error fetching statistics:', error)
+                // console.error('Error fetching statistics:', error)
             } finally {
                 setLoading(false)
             }

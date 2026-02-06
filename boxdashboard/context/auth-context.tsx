@@ -61,8 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .then(content => {
                 setIsAuthenticated(true);
                 setUsername(content.username);
-
-                console.log("---------User Content: ", content)
+                
+                // console.log("---------User Content: ", content)
 
                 // Update Redux store with user details that match userSlice
                 const userData = {
@@ -92,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 };
 
                 dispatch(setUser(userData));
-                console.log("-----------User Data: ", userData)
+                // console.log("-----------User Data: ", userData)
             })
             .catch(() => {
                 setIsAuthenticated(false);

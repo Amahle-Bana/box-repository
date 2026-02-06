@@ -15,6 +15,8 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=100, null=True, blank=True)
     # User Email
     email = models.EmailField(max_length=100, unique=True, editable=True, null=False, blank=False)
+    # Email verified via OTP
+    is_email_verified = models.BooleanField(default=False)
     # User Password (Hashed)
     password = models.CharField(max_length=255, null=False, blank=False, editable=True)
     # Candidate

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect, useCallback } from "react"
+import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
@@ -12,10 +13,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, XCircle, ArrowLeft } from "lucide-react"
-import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandThreads, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
+import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
 import { ClipLoader } from "react-spinners"
+import type { Candidate } from "@/types/dashboard"
 
-export default function EditCandidatePage() {
+function EditCandidatePageContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const candidateId = searchParams.get('id')
@@ -42,7 +44,7 @@ export default function EditCandidatePage() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-    const [candidate, setCandidate] = useState<any>(null)
+    const [candidate, setCandidate] = useState<Candidate | null>(null)
 
     // Form handlers
     const handleInputChange = (field: string, value: string) => {
@@ -66,15 +68,15 @@ export default function EditCandidatePage() {
     }
 
     // Fetch candidate data
-    const fetchCandidate = async () => {
+    const fetchCandidate = useCallback(async () => {
         if (!candidateId) return
 
         setIsLoading(true)
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-candidates/`)
             if (response.ok) {
-                const result = await response.json()
-                const foundCandidate = result.candidates.find((c: any) => c.id === parseInt(candidateId))
+                const result: { candidates: Candidate[] } = await response.json()
+                const foundCandidate = result.candidates.find((c) => c.id === parseInt(candidateId, 10))
                 if (foundCandidate) {
                     setCandidate(foundCandidate)
                     setCandidateFormData({
@@ -99,12 +101,12 @@ export default function EditCandidatePage() {
             } else {
                 setMessage({ type: 'error', text: 'Failed to fetch candidate data' })
             }
-        } catch (error) {
+        } catch (_error) {
             setMessage({ type: 'error', text: 'Network error while fetching candidate data' })
         } finally {
             setIsLoading(false)
         }
-    }
+    }, [candidateId])
 
     // Candidate update submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -158,7 +160,7 @@ export default function EditCandidatePage() {
     // Fetch candidate data on component mount
     useEffect(() => {
         fetchCandidate()
-    }, [candidateId])
+    }, [fetchCandidate])
 
     if (isLoading) {
         return (
@@ -339,10 +341,13 @@ export default function EditCandidatePage() {
                                                     </div>
                                                     {candidateFormData.profile_picture && (
                                                         <div className="w-16 h-16 border rounded-lg overflow-hidden">
-                                                            <img
+                                                            <Image
                                                                 src={candidateFormData.profile_picture}
                                                                 alt="Profile picture preview"
+                                                                width={64}
+                                                                height={64}
                                                                 className="w-full h-full object-cover"
+                                                                unoptimized
                                                             />
                                                         </div>
                                                     )}
@@ -512,5 +517,13 @@ export default function EditCandidatePage() {
                 </div>
             </SidebarInset>
         </SidebarProvider>
+    )
+}
+
+export default function EditCandidatePage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center py-8">Loading candidate...</div>}>
+            <EditCandidatePageContent />
+        </Suspense>
     )
 }

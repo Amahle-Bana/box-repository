@@ -20,8 +20,10 @@ import { useEffect, useState } from "react"
 
 export const description = "An interactive bar chart"
 
-// Chart data will be populated from API
-const chartData: { date: string; impressions: number }[] = []
+type DailyImpressionPoint = {
+    date: string
+    impressions: number
+}
 
 const chartConfig = {
     views: {
@@ -39,7 +41,7 @@ export function ChartBarInteractive() {
     const [impressionStats, setImpressionStats] = useState<{
         total_impressions: number;
         today_impressions: number;
-        daily_impressions: any[];
+        daily_impressions: DailyImpressionPoint[];
         loading: boolean;
         error: string | null;
     }>({
@@ -51,12 +53,12 @@ export function ChartBarInteractive() {
     })
 
     // Chart data state
-    const [chartData, setChartData] = useState<{ date: string; impressions: number }[]>([])
+    const [chartData, setChartData] = useState<DailyImpressionPoint[]>([])
 
     // Function to fetch impression statistics
     const fetchImpressionStats = async () => {
         try {
-            setImpressionStats(prev => ({ ...prev, loading: true, error: null }))
+            setImpressionStats((prev) => ({ ...prev, loading: true, error: null }))
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-impressions-stats/`)
 
@@ -67,10 +69,12 @@ export function ChartBarInteractive() {
             const data = await response.json()
 
             // Process daily impressions data for chart
-            const processedChartData = (data.daily_impressions || []).map((item: any) => ({
-                date: item.date,
-                impressions: item.impressions || 0
-            }))
+            const processedChartData = (data.daily_impressions || []).map(
+                (item: { date: string; impressions?: number }) => ({
+                    date: item.date,
+                    impressions: item.impressions ?? 0,
+                })
+            )
 
             setImpressionStats({
                 total_impressions: data.total_impressions || 0,
@@ -84,14 +88,13 @@ export function ChartBarInteractive() {
             setChartData(processedChartData)
 
             // Log the data for debugging
-            console.log('--------------------Total impressions:', data.total_impressions);
-            console.log('--------------------Today impressions:', data.today_impressions);
-            console.log('--------------------Daily breakdown:', data.daily_impressions);
-            console.log('--------------------Processed chart data:', processedChartData);
+            // console.log('--------------------Total impressions:', data.total_impressions);
+            // console.log('--------------------Today impressions:', data.today_impressions);
+            // console.log('--------------------Daily breakdown:', data.daily_impressions);
+            // console.log('--------------------Processed chart data:', processedChartData);
 
         } catch (error) {
-            console.error('Error fetching impression stats:', error)
-            setImpressionStats(prev => ({
+            setImpressionStats((prev) => ({
                 ...prev,
                 loading: false,
                 error: error instanceof Error ? error.message : 'Failed to fetch impression statistics'

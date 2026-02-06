@@ -47,7 +47,7 @@ export function ResetPasswordForm({
         setIsLoading(true)
 
         // @ Email Validation
-        if (!email.includes('@ufh.ac.za')) {
+        if (!email.includes('@gmail.com')) {
             setErrorMessage('Please enter a valid email address');
             setIsLoading(false);
             return;
@@ -57,7 +57,7 @@ export function ResetPasswordForm({
         if (email.length < 4) {
             setErrorMessage('Email must be at least 4 characters long');
             setIsLoading(false);
-            if (email.includes('@ufh.ac.za')) {
+            if (email.includes('@gmail.com')) {
                 setIsEmailValid(true);
             } else {
                 setIsEmailValid(false);
@@ -109,7 +109,7 @@ export function ResetPasswordForm({
             setIsEmailValid(null);
             return;
         }
-        setIsEmailValid(email.includes('@ufh.ac.za'));
+        setIsEmailValid(email.includes('@gmail.com'));
     }, [email]);
 
 
@@ -144,10 +144,10 @@ export function ResetPasswordForm({
                 <CardContent>
                     {/* Reset Password Form */}
                     <form onSubmit={handleSubmit}>
-                        <div className="grid gap-6">
-                            <div className="grid gap-6">
+                        <div className="grid gap-2">
+                            <div className="grid gap-2">
                                 {/* Email Input */}
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
                                     <Label htmlFor="email" className="flex justify-between items-center w-full">
                                         <p className="text-sm text-primary font-bold">Email</p>
                                         {isEmailValid === true ?
@@ -215,7 +215,7 @@ export function ResetPasswordForm({
                 </CardContent>
             </Card>
             {/* Terms and Privacy Link */}
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            <div className="font-comfortaa text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking Reset Password, you agree to our <Link href="/termsOfService" className="underline underline-offset-4">Terms of Service</Link>{" "}
                 and <Link href="/privacyPolicy" className="underline underline-offset-4">Privacy Policy</Link>.
             </div>

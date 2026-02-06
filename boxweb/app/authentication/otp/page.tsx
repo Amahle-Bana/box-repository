@@ -16,6 +16,7 @@ export default function OTPVerificationPage() {
     // Get email from URL parameters
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || '';
+    const mode = searchParams.get('mode') || 'login';
 
     // State Variables
     const [otp, setOtp] = useState("");
@@ -26,7 +27,7 @@ export default function OTPVerificationPage() {
 
     // Router and Auth Context
     const router = useRouter();
-    const { verifyOTP, resendOTP } = useAuth();
+    const { verifyOTP, resendOTP, refreshUserData } = useAuth();
 
     // Theme support
     const { theme, resolvedTheme } = useTheme();
@@ -39,9 +40,13 @@ export default function OTPVerificationPage() {
     // Redirect if no email provided
     useEffect(() => {
         if (!email) {
-            router.push('/authentication/signup');
+            if (mode === 'signup') {
+                router.push('/authentication/signup');
+            } else {
+                router.push('/authentication/login');
+            }
         }
-    }, [email, router]);
+    }, [email, mode, router]);
 
     // OTP Verification Form Submit Handler
     const handleOTPSubmit = (e: SyntheticEvent) => {
@@ -58,8 +63,10 @@ export default function OTPVerificationPage() {
 
         // Verify OTP
         verifyOTP(email, otp)
-            .then((result: { success: boolean; message: string }) => {
+            .then(async (result: { success: boolean; message: string }) => {
                 if (result && result.success) {
+                    // Refresh user data to pick up the new JWT and verified status
+                    await refreshUserData();
                     router.push('/home');
                 } else if (result) {
                     setErrorMessage(result.message);

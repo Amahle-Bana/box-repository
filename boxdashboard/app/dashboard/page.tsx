@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartBarInteractive } from "@/components/chart-bar-interactive"
@@ -15,9 +16,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle2, XCircle, Upload, Plus, Users, User } from "lucide-react"
-import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandThreads, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
+import { CheckCircle2, XCircle, Users, User } from "lucide-react"
+import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
 import { ClipLoader } from "react-spinners"
+import type { Party, Candidate, Post } from "@/types/dashboard"
 
 export default function Page() {
     const router = useRouter()
@@ -66,15 +68,15 @@ export default function Page() {
     const [candidateMessage, setCandidateMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
     // Edit Party/Candidate States
-    const [parties, setParties] = useState([])
-    const [candidates, setCandidates] = useState([])
+    const [parties, setParties] = useState<Party[]>([])
+    const [candidates, setCandidates] = useState<Candidate[]>([])
     const [isLoadingParties, setIsLoadingParties] = useState(false)
     const [isLoadingCandidates, setIsLoadingCandidates] = useState(false)
     const [partiesError, setPartiesError] = useState<string | null>(null)
     const [candidatesError, setCandidatesError] = useState<string | null>(null)
 
     // Posts States
-    const [posts, setPosts] = useState<any[]>([])
+    const [posts, setPosts] = useState<Post[]>([])
     const [isLoadingPosts, setIsLoadingPosts] = useState(false)
     const [postsError, setPostsError] = useState<string | null>(null)
 
@@ -240,13 +242,13 @@ export default function Page() {
     }, [candidateMessage])
 
     // Fetch parties data
-    const fetchParties = async () => {
+    const fetchParties = useCallback(async () => {
         setIsLoadingParties(true)
         setPartiesError(null)
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-parties/`)
             if (response.ok) {
-                const result = await response.json()
+                const result: { parties?: Party[] } = await response.json()
                 setParties(result.parties || [])
             } else {
                 setPartiesError('Failed to fetch parties')
@@ -256,16 +258,16 @@ export default function Page() {
         } finally {
             setIsLoadingParties(false)
         }
-    }
+    }, [])
 
     // Fetch candidates data
-    const fetchCandidates = async () => {
+    const fetchCandidates = useCallback(async () => {
         setIsLoadingCandidates(true)
         setCandidatesError(null)
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-candidates/`)
             if (response.ok) {
-                const result = await response.json()
+                const result: { candidates?: Candidate[] } = await response.json()
                 setCandidates(result.candidates || [])
             } else {
                 setCandidatesError('Failed to fetch candidates')
@@ -275,16 +277,16 @@ export default function Page() {
         } finally {
             setIsLoadingCandidates(false)
         }
-    }
+    }, [])
 
     // Fetch posts data
-    const fetchPosts = async () => {
+    const fetchPosts = useCallback(async () => {
         setIsLoadingPosts(true)
         setPostsError(null)
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-posts/`)
             if (response.ok) {
-                const result = await response.json()
+                const result: { posts?: Post[] } = await response.json()
                 setPosts(result.posts || [])
             } else {
                 setPostsError('Failed to fetch posts')
@@ -294,7 +296,7 @@ export default function Page() {
         } finally {
             setIsLoadingPosts(false)
         }
-    }
+    }, [])
 
     // Fetch data when component mounts or when respective tabs are selected
     useEffect(() => {
@@ -304,7 +306,7 @@ export default function Page() {
         } else if (selectedDashboard === "User Posts") {
             fetchPosts()
         }
-    }, [selectedDashboard])
+    }, [selectedDashboard, fetchParties, fetchCandidates, fetchPosts])
 
 
     // Dashboard Content
@@ -406,10 +408,13 @@ export default function Page() {
                                                     </div>
                                                     {partyFormData.logo && (
                                                         <div className="w-16 h-16 border rounded-lg overflow-hidden">
-                                                            <img
+                                                            <Image
                                                                 src={partyFormData.logo}
                                                                 alt="Party logo preview"
+                                                                width={64}
+                                                                height={64}
                                                                 className="w-full h-full object-cover"
+                                                                unoptimized
                                                             />
                                                         </div>
                                                     )}
@@ -664,10 +669,13 @@ export default function Page() {
                                                     </div>
                                                     {candidateFormData.profile_picture && (
                                                         <div className="w-16 h-16 border rounded-lg overflow-hidden">
-                                                            <img
+                                                            <Image
                                                                 src={candidateFormData.profile_picture}
                                                                 alt="Profile picture preview"
+                                                                width={64}
+                                                                height={64}
                                                                 className="w-full h-full object-cover"
+                                                                unoptimized
                                                             />
                                                         </div>
                                                     )}
@@ -879,16 +887,19 @@ export default function Page() {
                                                 </div>
                                             ) : (
                                                 <div className="space-y-4">
-                                                    {parties.map((party: any) => (
+                                                    {parties.map((party) => (
                                                         <Card key={party.id} className="border-l-4 border-l-blue-500">
                                                             <CardContent className="pt-4">
                                                                 <div className="flex items-start gap-4">
                                                                     {party.logo && (
                                                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                                                                            <img
+                                                                            <Image
                                                                                 src={party.logo}
                                                                                 alt={`${party.party_name} logo`}
+                                                                                width={64}
+                                                                                height={64}
                                                                                 className="w-full h-full object-cover"
+                                                                                unoptimized
                                                                             />
                                                                         </div>
                                                                     )}
@@ -978,16 +989,19 @@ export default function Page() {
                                                 </div>
                                             ) : (
                                                 <div className="space-y-4">
-                                                    {candidates.map((candidate: any) => (
+                                                    {candidates.map((candidate) => (
                                                         <Card key={candidate.id} className="border-l-4 border-l-green-500">
                                                             <CardContent className="pt-4">
                                                                 <div className="flex items-start gap-4">
                                                                     {candidate.profile_picture && (
                                                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                                                                            <img
+                                                                            <Image
                                                                                 src={candidate.profile_picture}
                                                                                 alt={`${candidate.candidate_name} profile`}
+                                                                                width={64}
+                                                                                height={64}
                                                                                 className="w-full h-full object-cover"
+                                                                                unoptimized
                                                                             />
                                                                         </div>
                                                                     )}

@@ -335,7 +335,6 @@ export function SignUpForm({
                             />
                         )}
                     </div>
-                    <CardTitle className="text-xl text-primary font-bold">Create an account</CardTitle>
                     <CardDescription className="text-primary">
                         Sign Up With Your Student Email
                     </CardDescription>
@@ -343,12 +342,12 @@ export function SignUpForm({
                 {/* Sign-Up Form Content */}
                 <CardContent>
                     <form onSubmit={handleSignUpSubmit}>
-                        <div className="grid gap-6">
+                        <div className="grid gap-2">
                             {/* Sign-Up Form Inputs */}
-                            <div className="grid gap-6">
+                            <div className="grid gap-1">
 
                                 {/* Sign-Up Form Full Name Input */}
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
                                     <Label htmlFor="fullName" className="text-sm font-bold text-primary">Full Name</Label>
                                     <Input
                                         id="fullName"
@@ -362,7 +361,7 @@ export function SignUpForm({
                                 </div>
 
                                 {/* Sign-Up Form Username Input */}
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
 
                                     <Label htmlFor="username" className="flex justify-between items-center w-full">
                                         <p className="text-sm">Username</p>
@@ -411,7 +410,7 @@ export function SignUpForm({
                                 </div>
 
                                 {/* Sign-Up Form Email Input */}
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
                                     <Label htmlFor="email" className="flex justify-between items-center w-full">
                                         <p className="text-sm text-primary font-bold">Email</p>
                                         {isEmailValid === true ?
@@ -444,7 +443,7 @@ export function SignUpForm({
                                     </div>
                                 </div>
                                 {/* Sign-Up Form Password Input */}
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
                                     <div className="flex items-center">
                                         <Label className="text-sm font-bold text-primary" htmlFor="password">Password</Label>
                                         <Link
@@ -485,7 +484,7 @@ export function SignUpForm({
                                     </div>
                                 </div>
 
-                                <div className="grid gap-3">
+                                <div className="grid gap-1">
                                     <Label htmlFor="structure" className="text-sm font-bold text-primary">Campus</Label>
                                     <Select
                                         value={structure}
@@ -526,7 +525,7 @@ export function SignUpForm({
                 </CardContent>
             </Card>
             {/* Sign-Up Form Terms and Privacy Link */}
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            <div className="font-comfortaa text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking Sign-Up, you agree to our <Link href="/privacyPolicy" className="underline underline-offset-4">Privacy Policy</Link>{" "}
                 and <Link href="/termsOfService" className="underline underline-offset-4">Terms of Service</Link>.
             </div>

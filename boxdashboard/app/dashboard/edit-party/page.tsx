@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect, useCallback } from "react"
+import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
@@ -11,11 +12,12 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { CheckCircle2, XCircle, Upload, ArrowLeft } from "lucide-react"
-import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandThreads, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
+import { CheckCircle2, XCircle, ArrowLeft } from "lucide-react"
+import { IconBrandFacebook, IconBrandInstagram, IconBrandX, IconBrandYoutube, IconBrandLinkedin, IconBrandTiktok } from "@tabler/icons-react"
 import { ClipLoader } from "react-spinners"
+import type { Party } from "@/types/dashboard"
 
-export default function EditPartyPage() {
+function EditPartyPageContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const partyId = searchParams.get('id')
@@ -42,7 +44,7 @@ export default function EditPartyPage() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-    const [party, setParty] = useState<any>(null)
+    const [party, setParty] = useState<Party | null>(null)
 
     // Form handlers
     const handleInputChange = (field: string, value: string) => {
@@ -66,15 +68,15 @@ export default function EditPartyPage() {
     }
 
     // Fetch party data
-    const fetchParty = async () => {
+    const fetchParty = useCallback(async () => {
         if (!partyId) return
 
         setIsLoading(true)
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-parties/`)
             if (response.ok) {
-                const result = await response.json()
-                const foundParty = result.parties.find((p: any) => p.id === parseInt(partyId))
+                const result: { parties: Party[] } = await response.json()
+                const foundParty = result.parties.find((p) => p.id === parseInt(partyId, 10))
                 if (foundParty) {
                     setParty(foundParty)
                     setPartyFormData({
@@ -99,12 +101,12 @@ export default function EditPartyPage() {
             } else {
                 setMessage({ type: 'error', text: 'Failed to fetch party data' })
             }
-        } catch (error) {
+        } catch (_error) {
             setMessage({ type: 'error', text: 'Network error while fetching party data' })
         } finally {
             setIsLoading(false)
         }
-    }
+    }, [partyId])
 
     // Party update submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -158,7 +160,7 @@ export default function EditPartyPage() {
     // Fetch party data on component mount
     useEffect(() => {
         fetchParty()
-    }, [partyId])
+    }, [fetchParty])
 
     if (isLoading) {
         return (
@@ -330,10 +332,13 @@ export default function EditPartyPage() {
                                                     </div>
                                                     {partyFormData.logo && (
                                                         <div className="w-16 h-16 border rounded-lg overflow-hidden">
-                                                            <img
+                                                            <Image
                                                                 src={partyFormData.logo}
                                                                 alt="Party logo preview"
+                                                                width={64}
+                                                                height={64}
                                                                 className="w-full h-full object-cover"
+                                                                unoptimized
                                                             />
                                                         </div>
                                                     )}
@@ -503,5 +508,13 @@ export default function EditPartyPage() {
                 </div>
             </SidebarInset>
         </SidebarProvider>
+    )
+}
+
+export default function EditPartyPage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center py-8">Loading party...</div>}>
+            <EditPartyPageContent />
+        </Suspense>
     )
 }

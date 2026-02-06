@@ -3,27 +3,13 @@
 import * as React from "react"
 import {
   IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
   IconEdit,
   IconFileAi,
   IconFileDescription,
   IconFileText,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -34,8 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useEffect, useState } from "react"
-import { useTheme } from "next-themes";
+import { useEffect } from "react"
 import { ChartColumnBig, UsersRound, UserRound } from "lucide-react";
 
 const data = {
@@ -137,11 +122,7 @@ export function AppSidebar({
   onDashboardChange?: (dashboard: string) => void
 }) {
 
-  const [mounted, setMounted] = useState(false);
-  const { theme, resolvedTheme } = useTheme();
-
   useEffect(() => {
-    setMounted(true);
   }, []);
   
   return (

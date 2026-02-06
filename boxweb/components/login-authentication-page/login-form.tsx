@@ -97,7 +97,12 @@ export function LoginForm({
         // Login Function (From Auth Provider)
         login(trimmedEmail, trimmedPassword)
             .then(result => {
-                if (result.success) {
+                if (result.success && result.otpRequired) {
+                    // Redirect to OTP verification page with email parameter
+                    const targetEmail = result.email || trimmedEmail;
+                    router.push(`/authentication/otp?email=${encodeURIComponent(targetEmail)}&mode=login`);
+                } else if (result.success) {
+                    // Fallback: in case backend ever returns a direct success without OTP
                     router.push('/home');
                 } else {
                     setErrorMessage(result.message);
@@ -144,7 +149,6 @@ export function LoginForm({
                         )}
 
                     </div>
-                    <CardTitle className="text-xl text-primary font-bold">Welcome To Box!</CardTitle>
                     <CardDescription className="text-primary">
                         Login With Your Student Email
                     </CardDescription>
@@ -156,13 +160,13 @@ export function LoginForm({
 
                     {/* Login Form */}
                     <form onSubmit={handleLoginSubmit}>
-                        <div className="grid gap-6">
+                        <div className="grid gap-2">
 
                             {/* Login Form Inputs */}
-                            <div className="grid gap-6">
+                            <div className="grid gap-2">
 
                                 {/* Email Input */}
-                                <div className="grid gap-3">
+                                <div className="grid">
                                     <Label htmlFor="email" className="flex justify-between items-center w-full">
                                         <p className="text-sm text-primary font-bold">Email</p>
                                         {isEmailValid === true ?
@@ -196,7 +200,7 @@ export function LoginForm({
                                 </div>
 
                                 {/* Password Input */}
-                                <div className="grid gap-3">
+                                <div className="grid">
                                     <div className="flex items-center">
                                         <Label className="text-sm font-bold text-primary" htmlFor="password">Password</Label>
                                         <Link
@@ -268,7 +272,7 @@ export function LoginForm({
 
 
             {/* Login Form Terms and Privacy Policy Links */}
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            <div className="font-comfortaa text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking Login, you agree to our <Link href="/privacyPolicy" className="underline underline-offset-4">Privacy Policy</Link>{" "}
                 and <Link href="/termsOfService" className="underline underline-offset-4">Terms of Service</Link>.
             </div>

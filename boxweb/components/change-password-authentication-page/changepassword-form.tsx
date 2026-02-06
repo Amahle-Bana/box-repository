@@ -147,9 +147,9 @@ export function ChangePasswordForm({
                 <CardContent>
                     {/* Change Password Form */}
                     <form onSubmit={handleSubmit}>
-                        <div className="grid gap-6">
+                        <div className="grid gap-2">
                             {/* Change Password Form New Password Label And Input */}
-                            <div className="grid gap-3 relative">
+                            <div className="grid gap-1 relative">
                                 <Label htmlFor="password" className="text-sm font-bold text-primary">New Password</Label>
                                 <Input
                                     id="password"
@@ -180,7 +180,7 @@ export function ChangePasswordForm({
                                 </button>
                             </div>
                             {/* Change Password Form Confirm Password Label And Input */}
-                            <div className="grid gap-3 relative">
+                            <div className="grid gap-1 relative">
                                 <Label htmlFor="confirmPassword" className="text-sm font-bold text-primary">Confirm Password</Label>
                                 <Input
                                     id="confirmPassword"
@@ -244,7 +244,7 @@ export function ChangePasswordForm({
                 </CardContent>
             </Card>
             {/* Change Password Form Terms and Privacy Link */}
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            <div className="font-comfortaa text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking Change Password, you agree to our <Link href="/termsOfService" className="underline underline-offset-4">Terms of Service</Link>{" "}
                 and <Link href="/privacyPolicy" className="underline underline-offset-4">Privacy Policy</Link>.
             </div>

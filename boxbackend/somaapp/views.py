@@ -218,21 +218,49 @@ class VerifyOTP(APIView):
                 if not user:
                     return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-                # Mark user as active (in case they weren't)
+                # Mark user as verified and active
+                user.is_email_verified = True
                 user.is_active = True
-                user.save()
+                user.last_login = timezone.now()
+                user.save(update_fields=['is_email_verified', 'is_active', 'last_login'])
 
-                return Response({
-                    'message': 'OTP verified successfully. Account activated.',
+                # Create JWT token now that OTP is verified
+                payload = {
+                    'id': user.id,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
+                    'iat': datetime.datetime.utcnow(),
+                }
+
+                token = jwt.encode(payload, 'secret', algorithm='HS256')
+
+                response = Response()
+                response.set_cookie(
+                    key='jwt',
+                    value=token,
+                    httponly=True,
+                    max_age=60 * 60 * 24 * 365,  # 365 days in seconds
+                    samesite='None',
+                    secure=False,  # Keep False for local development without HTTPS
+                    domain=None,
+                    path='/',
+                )
+
+                response.data = {
+                    'jwt': token,
+                    'username': user.username,
                     'user_id': user.id,
-                    'username': user.username
-                }, status=status.HTTP_200_OK)
+                    'message': 'OTP verified successfully. Account activated.',
+                }
+
+                return response
             else:
                 return Response({'error': message}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            return Response({'error': f'An error occurred during OTP verification: {str(e)}'},
-                          status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': f'An error occurred during OTP verification: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 
 # Check Username Availability View
@@ -271,52 +299,31 @@ class LoginUser(APIView):
         if not user.check_password(password):
             return Response({'error': 'Invalid password'}, status=status.HTTP_401_UNAUTHORIZED)
         
-        # Update last_login
-        user.last_login = timezone.now()
-        user.save(update_fields=['last_login'])
+        # At this point credentials are valid. Do NOT issue JWT yet.
+        # Instead, send an OTP that must be verified before authentication is completed.
+        try:
+            from .utilities.otp_utils import create_and_send_otp
 
-        # Creating a payload for the JWT token
-        payload = {
-            # User ID
-            'id': user.id,
-            # Expiration time
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
-            # Issued at
-            'iat': datetime.datetime.utcnow()
-        }
+            success, otp_obj, message = create_and_send_otp(email)
+            if not success:
+                return Response(
+                    {'error': f'Failed to send OTP: {message}'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
 
-        # Creating a JWT token using the payload and the secret key, and the algorithm HS256
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
-
-        # Creating a response
-        response = Response()
-
-        # Setting the cookie
-        response.set_cookie(
-            key='jwt',
-            value=token,
-            httponly=True,
-            max_age=60*60*24*365,  # 365 days in seconds
-            samesite='None',
-            secure=False,  # Keep False for local development without HTTPS
-            domain=None,  # Allow the browser to set the domain
-            path='/'
-        )
-        
-        print("=== Login Response Debug ===")
-        print("JWT token:", token[:20] + "..." if len(token) > 20 else token)
-        print("Response headers:", dict(response.items()))
-        print("Cookie being set:", response.cookies.get('jwt'))
-
-        # Setting the data
-        response.data = { 
-            "jwt": token,
-            "username": user.username,
-            "message": "Login successful"
-        }
-
-        # Returning the response
-        return response
+            return Response(
+                {
+                    'otp_required': True,
+                    'email': email,
+                    'message': 'OTP sent to your email. Please verify to complete login.',
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'An error occurred while sending OTP: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 # Verify Login View
 class VerifyLogin(APIView):
@@ -399,6 +406,11 @@ class UserView(APIView):
         if not user:
             print("User not found in database")
             raise AuthenticationFailed('User not found')
+
+        # Enforce email verification via OTP before exposing user data
+        if not getattr(user, 'is_email_verified', False):
+            print("User email not verified via OTP")
+            raise AuthenticationFailed('Email not verified via OTP')
 
         # Serializing the user
         serializer = UserSerializer(user)

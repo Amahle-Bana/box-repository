@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import {
   closestCenter,
   DndContext,
@@ -26,13 +27,10 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconCircleCheckFilled,
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
   IconLoader,
-  IconPlus,
-  IconTrendingUp,
 } from "@tabler/icons-react"
 import {
   ColumnDef,
@@ -49,7 +47,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
 import { z } from "zod"
 import { useState } from "react"
@@ -59,14 +56,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -79,10 +72,9 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+// import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -91,7 +83,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+// import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -106,6 +98,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+
+declare global {
+  interface Window {
+    testDeleteAPI?: (postId: number) => Promise<void>
+    checkAuthStatus?: () => void
+    testGetPosts?: () => Promise<void>
+  }
+}
 
 export const schema = z.object({
   id: z.number(),
@@ -247,10 +247,13 @@ export function DataTable({
         return (
           <div className="flex items-center gap-2">
             {user.profile_picture && (
-              <img
+              <Image
                 src={user.profile_picture}
-                alt={user.username}
+                alt={user.username || "User avatar"}
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full"
+                unoptimized
               />
             )}
             <div>
@@ -356,7 +359,7 @@ export function DataTable({
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => {
-                  console.log('Delete button clicked for post ID:', postId)
+                  // console.log('Delete button clicked for post ID:', postId)
                   handleDeletePost(postId)
                 }}
                 disabled={isDeleting}
@@ -407,34 +410,34 @@ export function DataTable({
   }
 
   async function handleDeletePost(postId: number) {
-    console.log('=== Starting delete post process ===')
-    console.log('Post ID to delete:', postId)
+    // console.log('=== Starting delete post process ===')
+    // console.log('Post ID to delete:', postId)
 
     if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-      console.log('User cancelled delete operation')
+      // console.log('User cancelled delete operation')
       return
     }
 
     setDeletingPostId(postId)
-    console.log('Set deleting state for post:', postId)
+    // console.log('Set deleting state for post:', postId)
 
     try {
       // Get JWT token from localStorage (stored as 'jwt_token')
       const token = localStorage.getItem('jwt_token')
 
-      console.log('Delete post - Token found:', !!token)
-      console.log('Delete post - Token value (first 20 chars):', token ? token.substring(0, 20) + '...' : 'null')
-      console.log('Delete post - Post ID:', postId)
+      // console.log('Delete post - Token found:', !!token)
+      // console.log('Delete post - Token value (first 20 chars):', token ? token.substring(0, 20) + '...' : 'null')
+      // console.log('Delete post - Post ID:', postId)
 
       if (!token) {
-        console.error('Delete post - No JWT token found in localStorage')
-        console.log('Available localStorage keys:', Object.keys(localStorage))
+        // console.error('Delete post - No JWT token found in localStorage')
+        // console.log('Available localStorage keys:', Object.keys(localStorage))
         toast.error('Authentication required. Please log in again.')
         return
       }
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/delete-post/${postId}/`
-      console.log('Delete post - API URL:', apiUrl)
+      // console.log('Delete post - API URL:', apiUrl)
 
       const response = await fetch(apiUrl, {
         method: 'DELETE',
@@ -444,12 +447,12 @@ export function DataTable({
         },
       })
 
-      console.log('Delete post - Response status:', response.status)
-      console.log('Delete post - Response ok:', response.ok)
+      // console.log('Delete post - Response status:', response.status)
+      // console.log('Delete post - Response ok:', response.ok)
 
       if (response.ok) {
         const result = await response.json()
-        console.log('Delete post - Success response:', result)
+        // console.log('Delete post - Success response:', result)
         toast.success('Post deleted successfully')
 
               // Remove the post from the local state
@@ -463,38 +466,36 @@ export function DataTable({
         let errorResult
         try {
           errorResult = await response.json()
-          console.log('Delete post - Error response:', errorResult)
+          // console.log('Delete post - Error response:', errorResult)
         } catch (e) {
-          console.log('Delete post - Could not parse error response as JSON')
+          // console.log('Delete post - Could not parse error response as JSON')
           errorResult = { error: `HTTP ${response.status}: ${response.statusText}` }
         }
-        console.error('Delete post failed with status:', response.status, 'Response:', errorResult)
+        // console.error('Delete post failed with status:', response.status, 'Response:', errorResult)
         toast.error(errorResult.error || 'Failed to delete post')
       }
     } catch (error) {
-      console.error('Network error during delete post:', error)
       toast.error('Network error. Please try again.')
     } finally {
-      console.log('Delete post process completed for post ID:', postId)
+      // console.log('Delete post process completed for post ID:', postId)
       setDeletingPostId(null)
     }
   }
 
   // Debug functions for testing (can be called from browser console)
   React.useEffect(() => {
-    // @ts-ignore
     window.testDeleteAPI = async (postId: number) => {
-      console.log('=== Testing Delete API ===')
+      // console.log('=== Testing Delete API ===')
       const token = localStorage.getItem('jwt_token')
-      console.log('Token found:', !!token)
+      // console.log('Token found:', !!token)
 
       if (!token) {
-        console.error('No JWT token found')
+        // console.error('No JWT token found')
         return
       }
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/delete-post/${postId}/`
-      console.log('API URL:', apiUrl)
+      // console.log('API URL:', apiUrl)
 
       try {
         const response = await fetch(apiUrl, {
@@ -505,30 +506,27 @@ export function DataTable({
           },
         })
 
-        console.log('Response status:', response.status)
+        // console.log('Response status:', response.status)
         const result = await response.json()
-        console.log('Response:', result)
+        // console.log('Response:', result)
       } catch (error) {
-        console.error('Test API error:', error)
       }
     }
 
-    // @ts-ignore
     window.checkAuthStatus = () => {
-      console.log('=== Checking Authentication Status ===')
+      // console.log('=== Checking Authentication Status ===')
       const token = localStorage.getItem('jwt_token')
-      console.log('JWT Token exists:', !!token)
-      console.log('Token (first 20 chars):', token ? token.substring(0, 20) + '...' : 'null')
-      console.log('All localStorage keys:', Object.keys(localStorage))
+      // console.log('JWT Token exists:', !!token)
+      // console.log('Token (first 20 chars):', token ? token.substring(0, 20) + '...' : 'null')
+      // console.log('All localStorage keys:', Object.keys(localStorage))
     }
 
-    // @ts-ignore
     window.testGetPosts = async () => {
-      console.log('=== Testing Get Posts API ===')
+      // console.log('=== Testing Get Posts API ===')
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-posts/`)
-      console.log('Response status:', response.status)
+      // console.log('Response status:', response.status)
       const result = await response.json()
-      console.log('Response:', result)
+      // console.log('Response:', result)
     }
   }, [])
 
@@ -799,10 +797,13 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
           {/* User Info */}
           <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
             {profilePicture && (
-              <img
+              <Image
                 src={profilePicture}
                 alt={username}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full"
+                unoptimized
               />
             )}
             <div>

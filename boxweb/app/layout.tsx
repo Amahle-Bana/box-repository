@@ -51,7 +51,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${comfortaa.variable} ${playfair.variable} ${playfairDisplay.variable} antialiased `}
+                className={`${comfortaa.variable} antialiased `}
             >
                 <Providers>
                     <ThemeProvider

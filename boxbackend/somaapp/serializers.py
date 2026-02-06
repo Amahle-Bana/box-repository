@@ -14,12 +14,14 @@ class UserSerializer(serializers.ModelSerializer):
             'user_facebook', 'user_instagram', 'user_x_twitter', 'user_threads',
             'user_youtube', 'user_linkedin', 'user_tiktok',
             # Django's AbstractUser fields that are inherited
-            'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined', 'last_login'
+            'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined', 'last_login',
+            'is_email_verified',
         ]
         # Extra kwargs
         extra_kwargs = {
             # Password field is write only
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'is_email_verified': {'read_only': True},
         }
 
     def create(self, validated_data):

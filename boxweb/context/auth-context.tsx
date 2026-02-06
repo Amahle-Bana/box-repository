@@ -9,11 +9,21 @@ import { setUser } from '../redux/user-store/userSlice';
 // Auth Context Type Variables
 interface AuthContextType {
     isAuthenticated: boolean;
+    emailVerified: boolean;
     username: string | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+    login: (
+        email: string,
+        password: string
+    ) => Promise<{ success: boolean; message: string; otpRequired?: boolean; email?: string }>;
     logout: () => Promise<void>;
-    signup: (username: string, email: string, password: string, fullName?: string, structure?: string) => Promise<{ success: boolean; message: string }>;
+    signup: (
+        username: string,
+        email: string,
+        password: string,
+        fullName?: string,
+        structure?: string
+    ) => Promise<{ success: boolean; message: string; email?: string }>;
     checkExistingUserData: (username: string, email: string) => Promise<{ success: boolean; message: string; errors?: string[] }>;
     verifyOTP: (email: string, otpCode: string) => Promise<{ success: boolean; message: string }>;
     resendOTP: (email: string) => Promise<{ success: boolean; message: string }>;
@@ -30,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // State Variables
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(false);
     const [username, setUsername] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -62,8 +73,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 throw new Error('Authentication failed');
             })
             .then(content => {
-                setIsAuthenticated(true);
-                setUsername(content.username);
+                const isVerified = !!content.is_email_verified;
+
+                setEmailVerified(isVerified);
+                setIsAuthenticated(isVerified);
+                setUsername(isVerified ? content.username : null);
 
                 console.log("---------User Content: ", content)
                 console.log("---------User Structure from backend: ", content.structure)
@@ -105,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
             .catch(() => {
                 setIsAuthenticated(false);
+                setEmailVerified(false);
                 setUsername(null);
                 dispatch(setUser({})); // Clear user data in Redux
                 localStorage.removeItem('jwt_token'); // Clear stored token
@@ -128,31 +143,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
         })
             .then(async response => {
+                const content = await response.json().catch(() => ({}));
+
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const content = await response.json();
-                if (content.username) {
-                    // Store JWT token in localStorage as fallback
-                    if (content.jwt) {
-                        localStorage.setItem('jwt_token', content.jwt);
-                    }
-
-                    // Skip verification for now
-                    setIsAuthenticated(true);
-                    setUsername(content.username);
-
-                    console.log("Login successful, checking auth status and loading structure...");
-                    await checkAuthStatus();
-
-                    console.log("Auth check completed, structure should be loaded in Redux");
-                    return { success: true, message: content.message || 'Login successful' };
-                } else {
                     return {
                         success: false,
-                        message: content.error || 'Login failed. Please check your credentials.'
+                        message: content.error || 'Login failed. Please check your credentials.',
                     };
                 }
+
+                if (content.otp_required) {
+                    // Credentials are correct and OTP has been sent.
+                    // Do NOT mark the user as authenticated yet.
+                    return {
+                        success: true,
+                        message: content.message || 'OTP sent to your email. Please verify to continue.',
+                        otpRequired: true,
+                        email: content.email || trimmedEmail,
+                    };
+                }
+
+                // Fallback: unexpected successful response without otp_required
+                return {
+                    success: false,
+                    message: content.error || 'Unexpected login response. Please try again.',
+                };
             })
             .catch((error) => {
                 console.error('Login error:', error);
@@ -225,107 +240,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify(signupData),
         })
             .then(async response => {
+                const content = await response.json().catch(() => ({}));
+
                 if (!response.ok) {
-                    // Try to get the error message from the response
-                    try {
-                        const errorData = await response.json();
-                        return {
-                            success: false,
-                            message: errorData.error || 'Signup failed. Please try again.'
-                        };
-                    } catch (parseError) {
-                        return {
-                            success: false,
-                            message: 'Signup failed. Please try again.'
-                        };
-                    }
-                }
-                return response.json();
-            })
-            .then(content => {
-                if (!content.username) {
                     return {
                         success: false,
-                        message: content.error || 'Signup failed. Please try again.'
+                        message: content.error || 'Signup failed. Please try again.',
                     };
                 }
 
-                // Verify the signup
-                return fetch(`${process.env.NEXT_PUBLIC_VERIFY_SIGNUP || 'http://localhost:8000/somaapp/verify-signup/'}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email }),
-                })
-                    .then(verifyResponse => {
-                        if (!verifyResponse.ok) {
-                            // If verification fails, attempt to clean up the partial registration
-                            return fetch(`${process.env.NEXT_PUBLIC_CLEANUP_SIGNUP || 'http://localhost:8000/somaapp/cleanup-signup/'}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ email }),
-                            })
-                                .then(() => {
-                                    throw new Error('Database registration verification failed');
-                                });
-                        }
-                        return content;
-                    });
-            })
-            .then(() => {
-                // Try to login after successful signup
-                return login(email, password)
-                    .then(loginResult => {
-                        if (!loginResult.success) {
-                            // If login fails, clean up the registration
-                            return fetch(`${process.env.NEXT_PUBLIC_CLEANUP_SIGNUP || 'http://localhost:8000/somaapp/cleanup-signup/'}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ email }),
-                            })
-                                .then(() => {
-                                    return {
-                                        success: false,
-                                        message: 'Username Or E-mail Already Exists'
-                                    };
-                                });
-                        }
-                        return loginResult;
-                    })
-                    .catch(() => {
-                        // If login throws an error, clean up the registration
-                        return fetch(`${process.env.NEXT_PUBLIC_CLEANUP_SIGNUP}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ email }),
-                        })
-                            .then(() => {
-                                throw new Error('Login failed after signup');
-                            });
-                    });
+                // Backend returns message, user_id, and email when user is created and OTP is sent.
+                return {
+                    success: true,
+                    message: content.message || 'User created successfully. OTP sent to email.',
+                    email: content.email || email,
+                };
             })
             .catch(error => {
+                console.error('Signup error:', error);
                 return {
                     success: false,
-                    message: error.message === 'Database registration verification failed'
-                        ? 'Unable to verify signup status. Please try again.'
-                        : error.message === 'Login failed after signup'
-                            ? 'Signup successful but automatic login failed. Please try logging in manually.'
-                            : 'Network error occurred. Please check your connection and try again.'
+                    message: 'Network error occurred. Please check your connection and try again.',
                 };
             });
     };
 
     // Verify OTP Function
     const verifyOTP = (email: string, otpCode: string) => {
-        return fetch(`${process.env.NEXT_PUBLIC_VERIFY_OTP}/somaapp/verify-otp/`, {
+        const baseUrl = process.env.NEXT_PUBLIC_VERIFY_OTP || 'http://localhost:8000';
+        return fetch(`${baseUrl}/somaapp/verify-otp/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -333,32 +276,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify({ email, otp_code: otpCode }),
         })
             .then(async response => {
+                const content = await response.json().catch(() => ({}));
+
                 if (!response.ok) {
-                    try {
-                        const errorData = await response.json();
-                        return {
-                            success: false,
-                            message: errorData.error || 'OTP verification failed. Please try again.'
-                        };
-                    } catch (parseError) {
-                        return {
-                            success: false,
-                            message: 'OTP verification failed. Please try again.'
-                        };
-                    }
-                }
-                return response.json();
-            })
-            .then(content => {
-                if (!content.message) {
                     return {
                         success: false,
-                        message: content.error || 'OTP verification failed. Please try again.'
+                        message: content.error || 'OTP verification failed. Please try again.',
                     };
                 }
+
                 return {
                     success: true,
-                    message: content.message
+                    message: content.message || 'OTP verified successfully.',
                 };
             })
             .catch(error => {
@@ -371,7 +300,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Resend OTP Function
     const resendOTP = (email: string) => {
-        return fetch(`${process.env.NEXT_PUBLIC_RESEND_OTP}/somaapp/signup/`, {
+        const baseUrl = process.env.NEXT_PUBLIC_RESEND_OTP || 'http://localhost:8000';
+        return fetch(`${baseUrl}/somaapp/signup/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -460,7 +390,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Return Auth Provider
     return (
-        <AuthContext.Provider value={{ isAuthenticated, username, loading, login, logout, signup, checkExistingUserData, verifyOTP, resendOTP, refreshUserData }}>
+        <AuthContext.Provider
+            value={{
+                isAuthenticated,
+                emailVerified,
+                username,
+                loading,
+                login,
+                logout,
+                signup,
+                checkExistingUserData,
+                verifyOTP,
+                resendOTP,
+                refreshUserData,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

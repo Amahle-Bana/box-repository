@@ -3,14 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Link from "next/link"
 import { useState, SyntheticEvent, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ClipLoader } from 'react-spinners';
 import { CheckCircle2, XCircle, Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
-import { useTheme } from "next-themes";
-
 
 // import AppleLogin from 'react-apple-login';
 
@@ -34,13 +31,6 @@ export function LoginForm({
 
     // Login Function
     const { login } = useAuth();
-
-    const { theme, resolvedTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-      setMounted(true);
-    }, []);
 
 
     // Login Form Submit Handler
@@ -133,7 +123,7 @@ export function LoginForm({
                     <div className="flex flex-col gap-4 items-center">
 
                     </div>
-                    <CardTitle className="text-xl text-primary font-bold">Welcome To Box!</CardTitle>
+                    <CardTitle className="text-xl text-primary font-bold">Welcome To Box Dashboard!</CardTitle>
                     <CardDescription className="text-primary">
                         Login With Your Student Email
                     </CardDescription>
@@ -148,10 +138,10 @@ export function LoginForm({
                         <div className="grid gap-6">
 
                             {/* Login Form Inputs */}
-                            <div className="grid gap-6">
+                            <div className="grid gap-2">
 
                                 {/* Email Input */}
-                                <div className="grid gap-3">
+                                <div className="grid">
                                     <Label htmlFor="email" className="flex justify-between items-center w-full">
                                         <p className="text-sm text-primary font-bold">Email</p>
                                         {isEmailValid === true ?
@@ -185,15 +175,9 @@ export function LoginForm({
                                 </div>
 
                                 {/* Password Input */}
-                                <div className="grid gap-3">
+                                <div className="grid">
                                     <div className="flex items-center">
                                         <Label className="text-sm font-bold text-primary" htmlFor="password">Password</Label>
-                                        <Link
-                                            href="/authentication/resetpassword"
-                                            className="ml-auto text-sm underline text-primary underline-offset-4"
-                                        >
-                                            Forgot your password?
-                                        </Link>
                                     </div>
                                     <div className="relative">
                                         <Input
