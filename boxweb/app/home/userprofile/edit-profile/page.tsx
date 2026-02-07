@@ -239,11 +239,11 @@ export default function EditProfile() {
                 delay(2000)
                     .then(() => {
                         setMessage(null);
-                        router.push('/home/profile');
+                        router.push('/home/userprofile');
                     })
                     .catch(error => {
                         console.error('Error in redirect:', error);
-                        router.push('/home/profile');
+                        router.push('/home/userprofile');
                     });
             })
             .catch(error => {

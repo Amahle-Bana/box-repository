@@ -106,3 +106,13 @@ export async function fetchAllParties(): Promise<Party[]> {
         throw error;
     }
 }
+
+export async function fetchPartyById(id: number): Promise<Party | null> {
+    const parties = await fetchAllParties();
+    return parties.find((p) => p.id === id) ?? null;
+}
+
+export async function fetchCandidateById(id: number): Promise<Candidate | null> {
+    const candidates = await fetchAllCandidates();
+    return candidates.find((c) => c.id === id) ?? null;
+}

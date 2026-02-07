@@ -1,5 +1,5 @@
 from django.urls import path
-from somaapp.views import SignUpUser, LoginUser, UserView, LogoutView, CheckUsernameAvailability, ResetPasswordRequest, ResetPasswordConfirm, ImportantDetails, VerifyLogin, VerifySignup, CleanupSignup, VerifyOTP, UpdateProfilePicture, UpdateUserProfile, UpdateNotificationSettings, UpdateContentPreferences, UpdatePrivacySettings, CheckExistingUserData, CreatePost, GetAllUsers, GetAllPosts, UpvotePost, DownvotePost, DeletePost, CommentPost, GetAllParties, RegisterParty, RegisterCandidate, GetAllCandidates, GetUserStats, GetPartyStats, GetCandidateStats, TrackImpressions, GetImpressionsStats, UpdateParty, UpdateCandidate, SearchPosts
+from somaapp.views import SignUpUser, LoginUser, UserView, LogoutView, CheckUsernameAvailability, ResetPasswordRequest, ResetPasswordConfirm, ImportantDetails, VerifyLogin, VerifySignup, CleanupSignup, VerifyOTP, UpdateProfilePicture, UpdateUserProfile, UpdateNotificationSettings, UpdateContentPreferences, UpdatePrivacySettings, CheckExistingUserData, CreatePost, GetAllUsers, GetAllPosts, GetMyPosts, GetUserProfileById, GetUserPosts, UpvotePost, DownvotePost, DeletePost, CommentPost, GetAllParties, RegisterParty, RegisterCandidate, GetAllCandidates, GetUserStats, GetPartyStats, GetCandidateStats, TrackImpressions, GetImpressionsStats, UpdateParty, UpdateCandidate, SearchPosts
 
 
 #  Somaapp URL patterns
@@ -46,6 +46,12 @@ urlpatterns = [
     path('get-all-users/', GetAllUsers.as_view(), name='get-all-users'),
     # Get All Posts URL
     path('get-all-posts/', GetAllPosts.as_view(), name='get-all-posts'),
+    # Get My Posts URL (authenticated user's non-anonymous posts)
+    path('get-my-posts/', GetMyPosts.as_view(), name='get-my-posts'),
+    # Get User Profile By ID URL (public profile)
+    path('get-user-profile/<int:user_id>/', GetUserProfileById.as_view(), name='get-user-profile'),
+    # Get User Posts URL (public posts by user_id)
+    path('get-user-posts/<int:user_id>/', GetUserPosts.as_view(), name='get-user-posts'),
     # Upvote Post URL
     path('upvote-post/<int:post_id>/', UpvotePost.as_view(), name='upvote-post'),
     # Downvote Post URL

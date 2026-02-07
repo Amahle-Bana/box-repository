@@ -1559,6 +1559,142 @@ class GetAllPosts(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# Get My Posts View (authenticated user's non-anonymous posts only)
+@method_decorator(csrf_exempt, name='dispatch')
+class GetMyPosts(APIView):
+    def get(self, request):
+        try:
+            token = request.COOKIES.get('jwt')
+            if not token:
+                auth_header = request.headers.get('Authorization')
+                if auth_header and auth_header.startswith('Bearer '):
+                    token = auth_header.split(' ')[1]
+                else:
+                    return Response({
+                        'error': 'Authentication required',
+                        'detail': 'No JWT token found in cookies or Authorization header'
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+
+            try:
+                payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                return Response({
+                    'error': 'Token has expired. Please log in again.',
+                    'detail': 'JWT token has expired'
+                }, status=status.HTTP_401_UNAUTHORIZED)
+            except Exception as e:
+                return Response({
+                    'error': 'Invalid authentication token.',
+                    'detail': f'JWT decode error: {str(e)}'
+                }, status=status.HTTP_401_UNAUTHORIZED)
+
+            user = User.objects.filter(id=payload['id']).first()
+            if not user:
+                return Response({
+                    'error': 'User not found. Please log in again.',
+                    'detail': 'User ID from token not found in database'
+                }, status=status.HTTP_401_UNAUTHORIZED)
+
+            page = int(request.GET.get('page', 1))
+            limit = int(request.GET.get('limit', 5))
+            offset = (page - 1) * limit
+
+            queryset = Post.objects.filter(user=user, is_anonymous=False).order_by('-created_at')
+            total_posts = queryset.count()
+            posts = queryset[offset:offset + limit]
+            posts_count = posts.count()
+
+            has_next = (offset + limit) < total_posts
+            has_previous = page > 1
+
+            serializer = PostSerializer(posts, many=True)
+
+            return Response({
+                'message': 'Posts fetched successfully',
+                'posts': serializer.data,
+                'count': posts_count,
+                'total': total_posts,
+                'page': page,
+                'limit': limit,
+                'has_next': has_next,
+                'has_previous': has_previous,
+                'next': f"?page={page + 1}&limit={limit}" if has_next else None,
+                'previous': f"?page={page - 1}&limit={limit}" if has_previous else None
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print("Error fetching my posts:", str(e))
+            return Response({
+                'error': f'Failed to fetch posts: {str(e)}',
+                'detail': 'An error occurred while retrieving posts from the database'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Get User Profile By ID View (public profile for any user)
+@method_decorator(csrf_exempt, name='dispatch')
+class GetUserProfileById(APIView):
+    def get(self, request, user_id):
+        try:
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return Response({
+                    'error': 'User not found',
+                    'detail': f'No user with id {user_id}'
+                }, status=status.HTTP_404_NOT_FOUND)
+            serializer = UserSerializer(user)
+            data = dict(serializer.data)
+            data.pop('password', None)
+            data.pop('email', None)
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Error fetching user profile:", str(e))
+            return Response({
+                'error': f'Failed to fetch user profile: {str(e)}',
+                'detail': 'An error occurred while retrieving the user profile'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Get User Posts View (public non-anonymous posts by user_id)
+@method_decorator(csrf_exempt, name='dispatch')
+class GetUserPosts(APIView):
+    def get(self, request, user_id):
+        try:
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return Response({
+                    'error': 'User not found',
+                    'detail': f'No user with id {user_id}'
+                }, status=status.HTTP_404_NOT_FOUND)
+            page = int(request.GET.get('page', 1))
+            limit = int(request.GET.get('limit', 5))
+            offset = (page - 1) * limit
+            queryset = Post.objects.filter(user=user, is_anonymous=False).order_by('-created_at')
+            total_posts = queryset.count()
+            posts = queryset[offset:offset + limit]
+            posts_count = posts.count()
+            has_next = (offset + limit) < total_posts
+            has_previous = page > 1
+            serializer = PostSerializer(posts, many=True)
+            return Response({
+                'message': 'Posts fetched successfully',
+                'posts': serializer.data,
+                'count': posts_count,
+                'total': total_posts,
+                'page': page,
+                'limit': limit,
+                'has_next': has_next,
+                'has_previous': has_previous,
+                'next': f"?page={page + 1}&limit={limit}" if has_next else None,
+                'previous': f"?page={page - 1}&limit={limit}" if has_previous else None
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Error fetching user posts:", str(e))
+            return Response({
+                'error': f'Failed to fetch user posts: {str(e)}',
+                'detail': 'An error occurred while retrieving posts'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 # Get All Parties View
 @method_decorator(csrf_exempt, name='dispatch')
 class GetAllParties(APIView):

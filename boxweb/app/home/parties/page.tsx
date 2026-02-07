@@ -760,9 +760,6 @@ export default function InboxPage() {
     // Tab state for filtering parties
     const [selectedPartyTab, setSelectedPartyTab] = useState<string>("all");
 
-    // selectedParty useState() - now used for both publications and parties
-    const [selectedParty, setSelectedParty] = useState<Party | null>(null);
-
     // posts state for fetched posts from database
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
@@ -1614,6 +1611,7 @@ export default function InboxPage() {
                                         whileHover={{ scale: 1.04 }}
                                         whileTap={{ scale: 0.95 }}
                                         className="bg-background rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                                        onClick={() => router.push(`/home/popular-councillors/${candidate.id}`)}
                                     >
                                         {/* Candidate Container */}
                                         <div className="flex flex-col">
@@ -1754,6 +1752,7 @@ export default function InboxPage() {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="bg-background rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                                onClick={() => router.push(`/post/${post.id}`)}
                             >
                                 {/* Post Header */}
                                 <div className="flex items-center justify-between p-4 pb-3">
@@ -1783,10 +1782,20 @@ export default function InboxPage() {
                                         </div>
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-1">
-                                                <span className="text-sm font-semibold text-primary">
-                                                    {post.is_anonymous ? 'Anonymous' : getUserDisplayName(post.user)}
-                                                </span>
-                                                {!post.is_anonymous && post.user.candidate && (
+                                                {!post.is_anonymous && post.user?.id ? (
+                                                    <Link
+                                                        href={`/home/userprofile/${post.user.id}`}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="text-sm font-semibold text-primary hover:underline"
+                                                    >
+                                                        {getUserDisplayName(post.user)}
+                                                    </Link>
+                                                ) : (
+                                                    <span className="text-sm font-semibold text-primary">
+                                                        {post.is_anonymous ? 'Anonymous' : getUserDisplayName(post.user)}
+                                                    </span>
+                                                )}
+                                                {!post.is_anonymous && post.user?.candidate && (
                                                     <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
                                                         <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1805,13 +1814,13 @@ export default function InboxPage() {
                                         </span>
                                         <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <button className="p-1 hover:bg-gray-100 rounded-full transition-colors">
+                                                    <button className="p-1 hover:bg-gray-100 rounded-full transition-colors" onClick={(e) => e.stopPropagation()}>
                                                         <MoreHorizontal className="w-4 h-4 text-gray-600" />
                                                     </button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-48">
                                                     <DropdownMenuItem
-                                                        onClick={() => sharePost(post.id)}
+                                                        onClick={(e) => { e.stopPropagation(); sharePost(post.id); }}
                                                         className="cursor-pointer"
                                                     >
                                                         <Share className="w-4 h-4 mr-2" />
@@ -1870,7 +1879,7 @@ export default function InboxPage() {
                                     ];
 
                                     return (
-                                        <div className="relative">
+                                        <div className="relative" onClick={(e) => e.stopPropagation()}>
                                             {/* Only show carousel if we have valid media */}
                                             {combinedMedia.length > 0 ? (
                                                 <InstagramCarousel
@@ -1887,7 +1896,7 @@ export default function InboxPage() {
                                 })()}
 
                                 {/* Interaction Buttons */}
-                                <div className="px-4 py-3 border-t border-gray-100">
+                                <div className="px-4 py-3 border-t border-gray-100" onClick={(e) => e.stopPropagation()}>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-6">
                                             <div className="flex items-center gap-1">
@@ -2026,7 +2035,7 @@ export default function InboxPage() {
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.95 }}
                                     className="bg-background rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                                    onClick={() => setSelectedParty(party)}
+                                    onClick={() => router.push(`/home/parties/${party.id}`)}
                                 >
                                     {/* Party Container */}
                                     <div className="flex flex-col h-full">

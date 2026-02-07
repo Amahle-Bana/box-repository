@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Candidate, fetchAllCandidates } from '@/lib/soma-api';
@@ -20,6 +21,7 @@ interface PopularCouncillorsSectionProps {
 }
 
 export function PopularCouncillorsSection({ limit = 10, className = '' }: PopularCouncillorsSectionProps) {
+    const router = useRouter();
     const [candidates, setCandidates] = useState<Candidate[]>([]);
     const [isLoadingCandidates, setIsLoadingCandidates] = useState(true);
     const [candidatesError, setCandidatesError] = useState<string | null>(null);
@@ -106,6 +108,7 @@ export function PopularCouncillorsSection({ limit = 10, className = '' }: Popula
                                 whileHover={{ scale: 1.04 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="bg-background rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                                onClick={() => router.push(`/home/popular-councillors/${candidate.id}`)}
                             >
                                 <div className="flex flex-col">
                                     <div className="flex justify-between items-start">

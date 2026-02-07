@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Party, fetchAllParties } from '@/lib/soma-api';
@@ -21,6 +22,7 @@ interface TopPartiesSectionProps {
 }
 
 export function TopPartiesSection({ limit = 10, onPartySelect, className = '' }: TopPartiesSectionProps) {
+    const router = useRouter();
     const [parties, setParties] = useState<Party[]>([]);
     const [isLoadingParties, setIsLoadingParties] = useState(true);
     const [partiesError, setPartiesError] = useState<string | null>(null);
@@ -104,7 +106,7 @@ export function TopPartiesSection({ limit = 10, onPartySelect, className = '' }:
                                 whileHover={{ scale: 1.04 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="bg-background rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                                onClick={() => onPartySelect?.(party)}
+                                onClick={() => (onPartySelect ? onPartySelect(party) : router.push(`/home/parties/${party.id}`))}
                             >
                                 <div className="flex flex-col h-full">
                                     <div className="flex items-start justify-between">
