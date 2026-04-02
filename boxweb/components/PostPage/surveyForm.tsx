@@ -2,7 +2,7 @@ import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import { Button } from '../ui/button';
 import { FileText } from 'lucide-react';
 
-export default function FormButtonComponent(props: NodeViewProps) {
+export default function FormButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="subscribe-react-component flex justify-center items-center my-4">
       <Button

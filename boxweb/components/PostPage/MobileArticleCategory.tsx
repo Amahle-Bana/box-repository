@@ -50,10 +50,10 @@ export default function ArticleCategory({
                             <DialogHeader>
                                 <DialogTitle className="font-playfair-display">Suggest More Categories</DialogTitle>
                                 <DialogDescription className="font-playfair-display">
-                                    Let us know what categories you'd like to see added.<span className="text-xs text-red-500">(HELP US IMPROVE!)</span>
+                                    {"Let us know what categories you'd like to see added."}<span className="text-xs text-red-500">(HELP US IMPROVE!)</span>
                                 </DialogDescription>
                             </DialogHeader>
-                            <form onSubmit={e => { e.preventDefault(); e.stopPropagation(); document.activeElement?.blur(); }}>
+                            <form onSubmit={e => { e.preventDefault(); e.stopPropagation(); (document.activeElement as HTMLElement | null)?.blur(); }}>
                                 <textarea className="w-full border border-gray-300 rounded-md p-2 mb-4 font-playfair-display" rows={4} placeholder="Submit your category suggestions here..." required />
                                 <div className="flex justify-end gap-2">
                                     <DialogClose asChild>

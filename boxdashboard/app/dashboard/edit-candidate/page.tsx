@@ -101,7 +101,7 @@ function EditCandidatePageContent() {
             } else {
                 setMessage({ type: 'error', text: 'Failed to fetch candidate data' })
             }
-        } catch (_error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error while fetching candidate data' })
         } finally {
             setIsLoading(false)
@@ -142,7 +142,7 @@ function EditCandidatePageContent() {
             } else {
                 setMessage({ type: 'error', text: result.error || 'Failed to update candidate' })
             }
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error. Please try again.' })
         } finally {
             setIsSubmitting(false)

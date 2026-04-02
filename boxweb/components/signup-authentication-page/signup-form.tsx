@@ -12,6 +12,7 @@ import { useAuth } from "@/context/auth-context";
 import { useTheme } from "next-themes";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+const USERNAME_REGEX = /^[a-z0-9_]+$/;
 
 // Sign-Up Form
 export function SignUpForm({
@@ -49,9 +50,6 @@ export function SignUpForm({
         setMounted(true);
     }, []);
 
-    // Username validation regex
-    const usernameRegex = /^[a-z0-9_]+$/;
-
     // Username Availability Checker
     const checkUsernameAvailability = useCallback(async (username: string) => {
         // Convert username to lowercase
@@ -69,7 +67,7 @@ export function SignUpForm({
         }
 
         // Check for special characters
-        if (!usernameRegex.test(lowercaseUsername)) {
+        if (!USERNAME_REGEX.test(lowercaseUsername)) {
             setHasSpecialChars(true);
             setIsUsernameAvailable(null);
             setIsCheckingUsername(false);
@@ -247,7 +245,7 @@ export function SignUpForm({
                 return;
             }
 
-            if (!usernameRegex.test(lowercaseUsername)) {
+            if (!USERNAME_REGEX.test(lowercaseUsername)) {
                 setHasSpecialChars(true);
                 setHasUsernameSpaces(false);
                 setIsUsernameAvailable(null);
@@ -283,7 +281,7 @@ export function SignUpForm({
                 return;
             }
 
-            if (!usernameRegex.test(lowercaseUsername)) {
+            if (!USERNAME_REGEX.test(lowercaseUsername)) {
                 setHasSpecialChars(true);
                 setHasUsernameSpaces(false);
                 setIsUsernameAvailable(null);

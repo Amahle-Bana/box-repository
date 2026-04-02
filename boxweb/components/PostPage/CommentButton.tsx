@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { MessageSquare } from 'lucide-react';
 
 // Comment Button Component
-export default function CommentButtonComponent(props: NodeViewProps) {
+export default function CommentButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="comment-react-component flex justify-center items-center my-4">
       <Button

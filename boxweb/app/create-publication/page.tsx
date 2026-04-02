@@ -12,6 +12,8 @@ import { ClipLoader } from "react-spinners";
 import { cn } from "@/lib/utils"
 import { createPublication } from '@/redux/create-publication-store/createPublicationSlice';
 
+const USERNAME_REGEX = /^[a-z0-9_]+$/;
+
 export default function CreatePublicationsPage() {
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -31,9 +33,6 @@ export default function CreatePublicationsPage() {
     const [hasSpecialChars, setHasSpecialChars] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Username validation regex
-    const usernameRegex = /^[a-z0-9_]+$/;
-
     // Username Availability Checker
     const checkPublicationUsernameAvailability = useCallback(async (username: string) => {
         // Convert username to lowercase
@@ -51,7 +50,7 @@ export default function CreatePublicationsPage() {
         }
 
         // Check for special characters
-        if (!usernameRegex.test(lowercaseUsername)) {
+        if (!USERNAME_REGEX.test(lowercaseUsername)) {
             setHasSpecialChars(true);
             setIsUsernameAvailable(null);
             setIsCheckingUsername(false);
@@ -120,7 +119,7 @@ export default function CreatePublicationsPage() {
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    publication_owner_id: currentUser.uid,
+                    publication_owner_id: currentUser.id,
                     publication_owner_username: currentUser.username,
                     publication_username: publicationUsername,
                     publication_name: publicationName,
@@ -170,7 +169,7 @@ export default function CreatePublicationsPage() {
                 return;
             }
 
-            if (!usernameRegex.test(lowercaseUsername)) {
+            if (!USERNAME_REGEX.test(lowercaseUsername)) {
                 setHasSpecialChars(true);
                 setHasUsernameSpaces(false);
                 setIsUsernameAvailable(null);

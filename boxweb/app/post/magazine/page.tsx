@@ -1,30 +1,20 @@
-"use client"
+"use client";
 
-import {ChevronUp, FileStack, UserRoundPlus, Undo2, Redo2, Bold, Italic, Strikethrough, Underline, Link, Image, Mic, Video, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Code, ChevronDown, Type, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Quote, Bell, Share2, Share, MessageSquare, Send, FileText, UserPlus, Link2, Code2, BarChart3, BookOpen, Minus, BarChart2, FunctionSquare, FileTextIcon, Info, Settings, Smartphone, Monitor, Mail, Eye, Highlighter, Minimize2, Maximize2, ArrowLeft, PanelLeft, Tablet, Subscript, Superscript } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import AndroidIcon from '@mui/icons-material/Android';
-import AppleIcon from '@mui/icons-material/Apple';
-import { useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { Link as LinkExtension } from '@tiptap/extension-link'
-import { Image as ImageExtension } from '@tiptap/extension-image'
-import Placeholder from '@tiptap/extension-placeholder'
-import { Underline as UnderlineExtension } from '@tiptap/extension-underline'
-import TextAlign from '@tiptap/extension-text-align'
-import RichTextEditor from '@/components/PostPage/LargeRichTextEditor';
-import { Editor } from '@tiptap/react';
-import { useScreenSize } from '@/hooks/useScreenSize';
-import MobileRichTextEditor from '@/components/PostPage/MobileRichTextEditor';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-
+import {
+  Image as ImageIcon,
+  Mail,
+  Maximize2,
+  Mic,
+  Minimize2,
+  Monitor,
+  PanelLeft,
+  Smartphone,
+  Tablet,
+} from "lucide-react";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function MagazinePage() {
-  const [styleOpen, setStyleOpen] = useState(false);
-  const [buttonsOpen, setButtonsOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -119,7 +109,7 @@ export default function MagazinePage() {
                                     className="cursor-pointer text-center"
                                 >
                                     <div className="flex flex-col items-center">
-                                        <Image className="w-6 h-6 text-gray-400 mb-1" />
+                                        <ImageIcon className="w-6 h-6 text-gray-400 mb-1" />
                                         <span className="text-xs text-gray-500">
                                             Click to upload image
                                         </span>
@@ -159,222 +149,8 @@ export default function MagazinePage() {
                         </div>
                     </div>
                 </div>
-
-                {/* Post Content */}
-                <div className="flex-1 p-5 overflow-auto">
-                    {useScreenSize().isMobile ? <MobileRichTextEditor /> : <RichTextEditor />}
-                </div>
-
-
-                {/* Footer Section */}
-                <div className="p-5 border-t border-gray-300 flex justify-between items-center mt-auto">
-
-                    { useScreenSize().isMobile ? ( 
-
-                        <div className="flex gap-2">
-                        {/* Style Dropdown */}
-                            <DropdownMenu open={styleOpen} onOpenChange={setStyleOpen}>
-                                <DropdownMenuTrigger className="p-1 rounded-md bg-background text-primary text-center w-40 flex items-center justify-center gap-1">
-                                    Options
-                                    <ChevronUp className={`w-4 h-4 transition-transform duration-200 ${styleOpen ? 'rotate-180' : ''}`} />
-                                </DropdownMenuTrigger>
-
-                                {/* Style Dropdown Content */}
-                                <DropdownMenuContent className="w-40 font-playfair-display">
-                                    <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger>
-                                            <Info className="w-4 h-4 mr-2" />
-                                            Post Info
-                                        </DropdownMenuSubTrigger>
-                                        <DropdownMenuSubContent className="w-40 font-playfair-display ml-5 p-3">
-                                            <h3 className="text-base font-semibold mb-3 text-primary">Post Info</h3>
-                                            <div className="space-y-2">
-                                                <div className="flex justify-between">
-                                                    <span className="text-primary text-sm">Characters</span>
-                                                    <span className="text-primary text-sm">0</span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-primary text-sm">Words</span>
-                                                    <span className="text-primary text-sm">0</span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-primary text-sm">Sentences</span>
-                                                    <span className="text-primary text-sm">0</span>
-                                                </div>
-                                                <div className="border-t border-primary my-2"></div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-primary text-sm">Reading time</span>
-                                                    <span className="text-primary text-sm">0 min</span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-primary text-sm">Speaking time</span>
-                                                    <span className="text-primary text-sm">0 min</span>
-                                                </div>
-                                            </div>
-                                        </DropdownMenuSubContent>
-                                    </DropdownMenuSub>
-                                    <DropdownMenuItem>
-                                        <FileStack className="w-4 h-4 mr-2" />
-                                        Draft History
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Settings className="w-4 h-4 mr-2" />
-                                        Settings
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <UserPlus className="w-4 h-4 mr-2" />
-                                        Add Collaborator
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem 
-                                        onClick={() => setShowPreview(true)}
-                                    >
-                                        <Eye className="w-4 h-4 mr-2" />
-                                        Preview
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        ) : (
-
-                       
-                        <div className="flex gap-2">
-
-                            {/* Post Info Tooltip */}
-                        <TooltipProvider>
-                            <Tooltip>
-
-                                {/* Post Info Tooltip Button */}
-                                <TooltipTrigger asChild>
-                                    <button className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-500/30 hover:bg-gray-500/50">
-                                        <Info className="w-4 h-6" />
-                                    </button>
-                                </TooltipTrigger>
-
-                                {/* Post Info Tooltip Content */}
-                                <TooltipContent className="h-full w-74 h-70 p-4 bg-background border border-secondary mb-7 ml-3 font-playfair-display">
-                                    <h3 className="text-2xl font-semibold mb-3 text-secondary">Post Info</h3>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
-                                            <span className="text-secondary text-lg">Characters</span>
-                                            <span className="text-secondary text-lg">0</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-secondary text-lg">Words</span>
-                                            <span className="text-secondary text-lg">0</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-secondary text-lg">Sentences</span>
-                                            <span className="text-secondary text-lg">0</span>
-                                        </div>
-                                        <div className="border-t border-secondary my-2"></div>
-                                        <div className="flex justify-between">
-                                            <span className="text-secondary text-lg">Reading time</span>
-                                            <span className="text-secondary text-lg">0 min</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-secondary text-lg">Speaking time</span>
-                                            <span className="text-secondary text-lg">0 min</span>
-                                        </div>
-                                    </div>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-
-                        {/* Draft History Tooltip */}
-                        <TooltipProvider>
-                            <Tooltip>
-                                {/* Draft History Tooltip Button */}
-                                <TooltipTrigger asChild>
-                                    <button className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-500/30 hover:bg-gray-500/50">
-                                        <FileStack className="w-4 h-6" />
-                                    </button>
-                                </TooltipTrigger>
-                                {/* Draft History Tooltip Content */}
-                                <TooltipContent className="w-30 p-2 bg-background border border-secondary mb-5 font-playfair-display">
-                                    <p className="text-base text-secondary text-center">Draft History</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-
-
-                        {/* Settings Tooltip */}
-                        <TooltipProvider>
-                            <Tooltip>
-                                {/* Settings Tooltip Button */}
-                                <TooltipTrigger asChild>
-                                    <button className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-500/30 hover:bg-gray-500/50">
-                                        <Settings className="w-4 h-6" />
-                                    </button>
-                                </TooltipTrigger>
-                                {/* Settings Tooltip Content */}
-                                <TooltipContent className="w-30 p-2 bg-background border border-secondary mb-5 font-playfair-display">
-                                    <p className="text-base text-secondary text-center">Settings</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-
-
-                        {/* Add Collaborator Tooltip */}
-                        <TooltipProvider>
-                            <Tooltip>
-                                {/* Add Collaborator Tooltip Button */}
-                                <TooltipTrigger asChild>
-                                    <button className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-500/30 hover:bg-gray-500/50">
-                                        <UserRoundPlus className="w-4 h-6" />
-                                    </button>
-                                </TooltipTrigger>
-                                {/* Add Collaborator Tooltip Content */}
-                                <TooltipContent className="w-30 p-2 bg-background border border-secondary mb-5 font-playfair-display">
-                                    <p className="text-base text-secondary text-center">Add Collaborator</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        
-
-                        {/* Preview Tooltip */}
-                        <TooltipProvider>
-                            <Tooltip>
-                                {/* Preview Tooltip Button */}
-                                <TooltipTrigger asChild>
-                                    <button 
-                                        onClick={() => setShowPreview(true)}
-                                        className="block lg:block md:block sm:block xl:hidden flex items-center gap-2 px-4 py-2 rounded-md bg-gray-500/30 hover:bg-gray-500/50"
-                                    >
-                                        <Eye className="w-4 h-6" />
-                                    </button>
-                                </TooltipTrigger>
-                                {/* Preview Tooltip Content */}
-                                <TooltipContent className="w-30 p-2 bg-background border border-secondary mb-5 font-playfair-display">
-                                    <p className="text-lg text-secondary text-center">Preview</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
-                    )
-                }
-
-
-                    {/* Send To Everyone Tooltip */}
-                    <TooltipProvider>
-                        <Tooltip>
-                            {/* Send To Everyone Tooltip Button */}
-                            <TooltipTrigger asChild>
-                                <button className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600">
-                                    Send To Everyone
-                                </button>
-                            </TooltipTrigger>
-                            {/* Send To Everyone Tooltip Content */}
-                            <TooltipContent className="w-30 p-2 bg-background border border-secondary mb-5 font-playfair-display">
-                                <p className="text-secondary text-center">Publish and share with all subscribers</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
             </div>
         </div>
-
-
 
         {/*  Prototyping Container */}
         <div className={`${showPreview ? 'block' : 'hidden'} w-full xl:w-1/2 xl:flex xl:flex-col`}>
@@ -436,7 +212,7 @@ export default function MagazinePage() {
                         </TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="mobile" className=" flex-1 p-5 over">
+                    <TabsContent value="mobile" className="flex-1 p-5 overflow-auto">
                         
                         <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[500px] w-[250px]">
                             <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"></div>

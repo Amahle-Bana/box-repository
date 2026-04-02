@@ -87,7 +87,7 @@ export default function ImportEmailListPage() {
             const jwtToken = localStorage.getItem('jwt_token');
             const formData = new FormData();
             formData.append('csv_file', uploadedFiles[0]);
-            formData.append('publication_id', publicationId);
+            formData.append("publication_id", String(publicationId));
             const response = await fetch("http://localhost:8000/somaapp/upload-publication-csv/", {
                 method: "POST",
                 headers: {
@@ -132,7 +132,7 @@ export default function ImportEmailListPage() {
                 <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-md flex flex-col items-center">
                     <h2 className="text-2xl font-bold mb-2">Import Your E-mail List</h2>
                     
-                    <p className="text-gray-600 mb-6 text-center">Don't Have An E-mail List? Don't Worry, We Will Help You Build It?</p>
+                    <p className="text-gray-600 mb-6 text-center">{"Don't Have An E-mail List? Don't Worry, We Will Help You Build It?"}</p>
 
                     <div
                         className={`flex flex-col justify-center items-center rounded-lg border-2 border-dashed h-70 w-95 bg-background/60 transition-colors duration-200 ${isDragActive ? 'border-2 border-dashed border-secondary bg-primary/5' : ''}`}

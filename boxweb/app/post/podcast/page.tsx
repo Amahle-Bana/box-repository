@@ -1,22 +1,45 @@
-"use client"
+"use client";
 
-import {PanelLeft, Tablet, Monitor, Mail, FileStack, Undo2, Redo2, Bold, Italic, Strikethrough, Underline, Link, Image, Mic, Video, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Code, ChevronDown, Type, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Quote, Bell, Share2, Share, MessageSquare, Send, FileText, UserPlus, Link2, Code2, BarChart3, BookOpen, Minus, BarChart2, FunctionSquare, FileTextIcon, Info, Settings, Smartphone, Upload, UserRoundPlus, ChevronUp, Eye } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuSub, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import AndroidIcon from '@mui/icons-material/Android';
-import AppleIcon from '@mui/icons-material/Apple';
-import { useState, useEffect } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useScreenSize } from '@/hooks/useScreenSize';
-
+import {
+  ChevronUp,
+  Eye,
+  FileStack,
+  Info,
+  Mail,
+  Mic,
+  Monitor,
+  PanelLeft,
+  Settings,
+  Smartphone,
+  Tablet,
+  Upload,
+  UserPlus,
+  UserRoundPlus,
+  Video,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useState, useEffect } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 export default function PodcastPost() {
     const [scheduleDate, setScheduleDate] = useState('');
     const [scheduleTime, setScheduleTime] = useState('');
     const [showPreview, setShowPreview] = useState(false);
-    const [isMinimized, setIsMinimized] = useState(false);
-    const [buttonsOpen, setButtonsOpen] = useState(false);
-    const [moreOpen, setMoreOpen] = useState(false);
     const [styleOpen, setStyleOpen] = useState(false);
 
     useEffect(() => {
@@ -25,6 +48,8 @@ export default function PodcastPost() {
         setScheduleDate(now.toISOString().split('T')[0]);
         setScheduleTime(now.toLocaleTimeString('en-US', { hour12: false }));
     }, []);
+
+    const { isMobile } = useScreenSize();
 
     return (
       // Main Container
@@ -205,7 +230,7 @@ export default function PodcastPost() {
             {/* Footer Section */}
             <div className="p-5 border-t border-gray-300 flex justify-between items-center">
 
-                { useScreenSize().isMobile ? ( 
+                {isMobile ? ( 
 
                 <div className="flex gap-2">
 

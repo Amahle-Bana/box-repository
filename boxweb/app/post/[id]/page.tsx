@@ -6,17 +6,20 @@ import { ArrowLeft, MessageCircle, ArrowBigUp, ArrowBigDown, MoreVertical, User 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 // import { Textarea } from "@/components/ui/textarea"; // Not available, using native textarea
 import { useAuth } from "@/context/auth-context";
 import Image from 'next/image';
 
+interface MediaDataItem {
+    data?: string;
+}
+
 interface Post {
     id: number;
     content: string;
-    images: string[];
-    videos: string[];
+    images: (string | MediaDataItem)[];
+    videos: (string | MediaDataItem)[];
     is_anonymous: boolean;
     user: {
         id: number;
@@ -34,10 +37,10 @@ interface Post {
     updated_at: string;
     upvotes: number;
     downvotes: number;
-    comments: any[];
+    comments: PostComment[];
 }
 
-interface Comment {
+interface PostComment {
     id: string;
     user_id: number;
     username: string;
@@ -365,8 +368,14 @@ export default function PostDetailsPage() {
                                     // Extract image data URLs from image objects
                                     const imageUrls: string[] = [];
 
-                                    post.images.forEach((imageItem: any) => {
-                                        if (imageItem && imageItem.data && typeof imageItem.data === 'string') {
+                                    post.images.forEach((imageItem: MediaDataItem | string) => {
+                                        if (
+                                            typeof imageItem === 'object' &&
+                                            imageItem !== null &&
+                                            'data' in imageItem &&
+                                            imageItem.data &&
+                                            typeof imageItem.data === 'string'
+                                        ) {
                                             const dataUrl = imageItem.data;
                                             // Check if it's a valid data URL
                                             if (dataUrl.startsWith('data:')) {
@@ -399,8 +408,14 @@ export default function PostDetailsPage() {
                                     // Extract video data URLs from video objects
                                     const videoUrls: string[] = [];
 
-                                    post.videos.forEach((videoItem: any) => {
-                                        if (videoItem && videoItem.data && typeof videoItem.data === 'string') {
+                                    post.videos.forEach((videoItem: MediaDataItem | string) => {
+                                        if (
+                                            typeof videoItem === 'object' &&
+                                            videoItem !== null &&
+                                            'data' in videoItem &&
+                                            videoItem.data &&
+                                            typeof videoItem.data === 'string'
+                                        ) {
                                             const dataUrl = videoItem.data;
                                             // Check if it's a valid data URL
                                             if (dataUrl.startsWith('data:')) {
@@ -598,7 +613,7 @@ export default function PostDetailsPage() {
                             {/* Comments List */}
                             <div className="space-y-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 min-h-0 pr-2 scroll-smooth">
                                 {post?.comments && post.comments.length > 0 ? (
-                                    post.comments.map((comment: any, index: number) => (
+                                    post.comments.map((comment: PostComment, index: number) => (
                                         <div key={comment.id || index} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
                                             <Avatar className="w-8 h-8">
                                                 {comment.profile_picture ? (

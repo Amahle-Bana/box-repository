@@ -98,7 +98,7 @@ export function LoginForm({
                     setErrorMessage(result.message);
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 setErrorMessage('An error occurred during login. Please try again.');
             })
             .finally(() => {

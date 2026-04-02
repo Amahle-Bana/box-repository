@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
                         10. Changes to This Policy
                     </h2>
                     <p className="text-primary leading-relaxed font-playfair-display">
-                        We may update this privacy policy from time to time to reflect changes in our practices or applicable laws. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date. Continued use of the platform after changes constitutes acceptance of the updated policy.
+                        We may update this privacy policy from time to time to reflect changes in our practices or applicable laws. We will notify you of any material changes by posting the new policy on this page and updating the &quot;Last updated&quot; date. Continued use of the platform after changes constitutes acceptance of the updated policy.
                     </p>
                 </section>
 

@@ -14,6 +14,23 @@ import Image from "next/image";
 
 const searchCategories = ["All", "Writers", "Articles", "Magazines", "Podcasts"];
 
+interface SearchPostMediaItem {
+    data?: string;
+}
+
+interface SearchPostResult {
+    id: number;
+    profile_picture?: string;
+    username?: string;
+    is_anonymous?: boolean;
+    created_at: string;
+    content: string;
+    images?: SearchPostMediaItem[];
+    videos?: SearchPostMediaItem[];
+    upvotes?: number;
+    downvotes?: number;
+    comments?: unknown[];
+}
 
 export default function SearchPage() {
 
@@ -27,7 +44,7 @@ export default function SearchPage() {
 
     // Search functionality states
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchResults, setSearchResults] = useState<SearchPostResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +95,7 @@ export default function SearchPage() {
     };
 
     // Handle clicking on a post
-    const handlePostClick = (post: any) => {
+    const handlePostClick = (post: SearchPostResult) => {
         router.push(`/post/${post.id}`);
     };
 
@@ -150,7 +167,7 @@ export default function SearchPage() {
                             {!isLoading && !error && searchQuery && searchResults.length === 0 && (
                                 <div className="text-center py-12">
                                     <MagnifyingGlassIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                                    <p className="text-gray-500 text-lg">No posts found for "{searchQuery}"</p>
+                                    <p className="text-gray-500 text-lg">{`No posts found for "${searchQuery}"`}</p>
                                     <p className="text-gray-400 text-sm mt-2">Try a different search term</p>
                                 </div>
                             )}
@@ -159,7 +176,7 @@ export default function SearchPage() {
                             {!isLoading && searchResults.length > 0 && (
                                 <>
                                     <div className="text-sm text-gray-600">
-                                        Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} for "{searchQuery}"
+                                        {`Found ${searchResults.length} result${searchResults.length !== 1 ? 's' : ''} for "${searchQuery}"`}
                                     </div>
                                     {searchResults.map((post) => (
                                         <div
@@ -175,7 +192,7 @@ export default function SearchPage() {
                                                                 ? post.profile_picture
                                                                 : `data:image/jpeg;base64,${post.profile_picture}`
                                                             }
-                                                            alt={post.username}
+                                                            alt={post.username ?? 'User'}
                                                             width={40}
                                                             height={40}
                                                             className="w-full h-full object-cover rounded-full"
@@ -212,7 +229,7 @@ export default function SearchPage() {
 
                                                 // Extract images
                                                 if (post.images) {
-                                                    post.images.forEach((imageItem: any) => {
+                                                    post.images.forEach((imageItem: SearchPostMediaItem) => {
                                                         if (imageItem && imageItem.data && typeof imageItem.data === 'string') {
                                                             const dataUrl = imageItem.data;
                                                             if (dataUrl.startsWith('data:')) {
@@ -227,7 +244,7 @@ export default function SearchPage() {
 
                                                 // Extract videos
                                                 if (post.videos) {
-                                                    post.videos.forEach((videoItem: any) => {
+                                                    post.videos.forEach((videoItem: SearchPostMediaItem) => {
                                                         if (videoItem && videoItem.data && typeof videoItem.data === 'string') {
                                                             const dataUrl = videoItem.data;
                                                             if (dataUrl.startsWith('data:')) {

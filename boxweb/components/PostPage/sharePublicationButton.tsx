@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Share } from 'lucide-react';
 
 // Share Publication Button Component
-export default function SharePublicationButtonComponent(props: NodeViewProps) {
+export default function SharePublicationButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="share-publication-react-component flex justify-center items-center my-4">
       <Button

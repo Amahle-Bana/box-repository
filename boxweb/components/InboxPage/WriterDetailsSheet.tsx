@@ -3,10 +3,26 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import Image from "next/image"
 
+export interface InboxWriterSummary {
+    name: string
+    image: string
+    publication: string
+    followers: string | number
+    description: string
+}
+
+interface WriterArticlePreview {
+    title: string
+    subtitle: string
+    author: string
+    readTime?: string
+    date?: string
+}
+
 interface WriterDetailsSheetProps {
-    selectedWriter: any
-    setSelectedWriter: (writer: any) => void
-    articles: any[]
+    selectedWriter: InboxWriterSummary | null
+    setSelectedWriter: (writer: InboxWriterSummary | null) => void
+    articles: WriterArticlePreview[]
 }
 
 const WriterDetailsSheet = ({ selectedWriter, setSelectedWriter, articles }: WriterDetailsSheetProps) => {

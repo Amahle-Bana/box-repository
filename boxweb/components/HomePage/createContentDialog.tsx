@@ -17,7 +17,7 @@ export function CreateContentDialog({ showCreateModal, setShowCreateModal }: Cre
             <DialogContent className="sm:max-w-[500px] max-w-[380px] rounded-lg font-playfair-display">
                 {/* Create Content Modal Header */}
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">What's On Your Mind?</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold">{"What's On Your Mind?"}</DialogTitle>
                 </DialogHeader>
 
                 {/* Create Content Modal Buttons */}

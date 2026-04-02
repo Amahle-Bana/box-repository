@@ -72,7 +72,7 @@ export default function OTPVerificationPage() {
                     setErrorMessage(result.message);
                 }
             })
-            .catch((error: any) => {
+            .catch(() => {
                 setErrorMessage('An error occurred during OTP verification');
             })
             .finally(() => {
@@ -93,7 +93,7 @@ export default function OTPVerificationPage() {
                     setResendMessage(result.message);
                 }
             })
-            .catch((error: any) => {
+            .catch(() => {
                 setResendMessage('An error occurred while resending OTP');
             })
             .finally(() => {

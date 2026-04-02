@@ -162,7 +162,13 @@ export default function HelpPage() {
                                     type="text"
                                     placeholder="Search..."
                                     className="pl-10 w-full placeholder:hidden md:placeholder:block"
-                                    onClick={() => { typeof window !== 'undefined' && window.innerWidth < 768 ? router.push("/home/search") : setSearchQueryModal(true) }}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                                            router.push("/home/search");
+                                        } else {
+                                            setSearchQueryModal(true);
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>

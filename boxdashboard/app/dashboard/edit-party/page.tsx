@@ -101,7 +101,7 @@ function EditPartyPageContent() {
             } else {
                 setMessage({ type: 'error', text: 'Failed to fetch party data' })
             }
-        } catch (_error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error while fetching party data' })
         } finally {
             setIsLoading(false)
@@ -142,7 +142,7 @@ function EditPartyPageContent() {
             } else {
                 setMessage({ type: 'error', text: result.error || 'Failed to update party' })
             }
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error. Please try again.' })
         } finally {
             setIsSubmitting(false)

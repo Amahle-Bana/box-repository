@@ -13,6 +13,11 @@ import { updateUserField } from '@/redux/user-store/userSlice';
 import { RootState } from '@/redux'; // adjust import as needed
 
 
+interface PublicationApiRow {
+    id: number;
+    csv_file?: string;
+}
+
 const preferences = [
     "Family", "Health", "Relationships", "Sexuality", "Home", "Food", "Pets", "Mental Health",
     "Productivity", "Mindfulness", "Business", "Marketing", "Leadership", "Work",
@@ -102,8 +107,8 @@ export default function PublicationsCategoryPage() {
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to fetch publication data");
-            const publications = await response.json();
-            const publication = publications.find((pub: any) => pub.id === publicationId);
+            const publications = (await response.json()) as PublicationApiRow[];
+            const publication = publications.find((pub) => pub.id === publicationId);
             if (publication && publication.csv_file) {
                 // Decode base64
                 const decoded = atob(publication.csv_file);
@@ -111,8 +116,8 @@ export default function PublicationsCategoryPage() {
                 const rows = decoded.split('\n').filter(Boolean).map(row => row.split(','));
                 const headers = rows[0];
                 const data = rows.slice(1).map(row => {
-                    const obj: any = {};
-                    headers.forEach((header, idx) => {
+                    const obj: Record<string, string> = {};
+                    headers.forEach((header: string, idx: number) => {
                         obj[header.trim()] = row[idx]?.trim() ?? "";
                     });
                     return obj;
@@ -140,8 +145,8 @@ export default function PublicationsCategoryPage() {
                     credentials: "include",
                 });
                 if (!response.ok) throw new Error("Failed to fetch publication data");
-                const publications = await response.json();
-                const publication = publications.find((pub: any) => pub.id === publicationId);
+                const publications = (await response.json()) as PublicationApiRow[];
+                const publication = publications.find((pub) => pub.id === publicationId);
                 if (publication && publication.csv_file) {
                     // Decode base64
                     const decoded = atob(publication.csv_file);
@@ -168,9 +173,9 @@ export default function PublicationsCategoryPage() {
 
                     {/* Card Header */}
                     <CardHeader className="flex flex-col justify-center items-center">
-                        <CardTitle className="text-center font-playfair-display text-2xl md:text-3xl">Select Your Publication's Category</CardTitle>
+                        <CardTitle className="text-center font-playfair-display text-2xl md:text-3xl">{"Select Your Publication's Category"}</CardTitle>
                         <CardDescription className="text-center font-playfair-display text-sm md:text-base">
-                            This Will Be Your Publication's Category (Select 3 Maximum Categories)
+                            {"This Will Be Your Publication's Category (Select 3 Maximum Categories)"}
                         </CardDescription>
                     </CardHeader>
 

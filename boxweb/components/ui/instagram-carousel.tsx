@@ -170,16 +170,16 @@ export const InstagramCarousel: React.FC<InstagramCarouselProps> = ({
         }
     }, [isVideoPlaying, isFullscreen]);
 
-    if (validMedia.length === 0) return null;
-
-    const currentMedia = validMedia[currentIndex];
-    const mediaType = getFileType(currentMedia);
-    const isCurrentMediaVideo = mediaType === 'video';
-
-    // Handle keyboard events for fullscreen
+    // Handle keyboard events for fullscreen (must run before any conditional return — rules-of-hooks)
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (!isFullscreen) return;
+            if (validMedia.length === 0) return;
+
+            const currentMediaItem = validMedia[currentIndex];
+            const isCurrentMediaVideoKey = currentMediaItem
+                ? getFileType(currentMediaItem) === 'video'
+                : false;
 
             switch (event.key) {
                 case 'Escape':
@@ -195,7 +195,7 @@ export const InstagramCarousel: React.FC<InstagramCarouselProps> = ({
                     break;
                 case ' ':
                     event.preventDefault();
-                    if (isCurrentMediaVideo) {
+                    if (isCurrentMediaVideoKey) {
                         toggleFullscreenVideoPlayback();
                     }
                     break;
@@ -211,7 +211,13 @@ export const InstagramCarousel: React.FC<InstagramCarouselProps> = ({
             document.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
         };
-    }, [isFullscreen, currentIndex, validMedia.length, isCurrentMediaVideo, isVideoPlaying]);
+    }, [isFullscreen, currentIndex, validMedia, isVideoPlaying]);
+
+    if (validMedia.length === 0) return null;
+
+    const currentMedia = validMedia[currentIndex];
+    const mediaType = getFileType(currentMedia);
+    const isCurrentMediaVideo = mediaType === 'video';
 
     console.log('🎬 Rendering media:', {
         currentIndex,
@@ -308,7 +314,7 @@ export const InstagramCarousel: React.FC<InstagramCarouselProps> = ({
                                     }}
                                 />
 
-                                {/* Fallback regular img element for base64 data URLs */}
+                                {/* Fallback when next/image fails; native img for data URLs */}
                                 <img
                                     src={currentMedia}
                                     alt={`${alt} ${currentIndex + 1}`}

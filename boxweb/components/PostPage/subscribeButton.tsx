@@ -2,7 +2,7 @@ import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import { Button } from '../ui/button';
 import { Bell } from 'lucide-react';
 
-export default function SubscribeButtonComponent(props: NodeViewProps) {
+export default function SubscribeButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="subscribe-react-component flex justify-center items-center my-4">
       <Button

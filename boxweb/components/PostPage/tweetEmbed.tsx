@@ -1,6 +1,4 @@
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { nodePasteRule, ReactNodeViewRenderer } from '@tiptap/react'
-import { mergeAttributes, Node } from '@tiptap/core'
 import { Tweet } from 'react-tweet'
 
 export default function TweetComponent ({ node }: NodeViewProps) {

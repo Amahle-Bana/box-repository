@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Link } from 'lucide-react';
 
 // Link To Survey Button Component
-export default function LinkToSurveyButtonComponent(props: NodeViewProps) {
+export default function LinkToSurveyButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="link-to-survey-react-component flex justify-center items-center my-4">
       <Button

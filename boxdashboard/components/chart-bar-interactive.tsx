@@ -38,7 +38,7 @@ const chartConfig = {
 export function ChartBarInteractive() {
 
     // Impression tracking state
-    const [impressionStats, setImpressionStats] = useState<{
+    const [, setImpressionStats] = useState<{
         total_impressions: number;
         today_impressions: number;
         daily_impressions: DailyImpressionPoint[];

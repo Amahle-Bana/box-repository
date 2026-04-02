@@ -85,22 +85,40 @@ interface User {
     [key: string]: unknown;
 }
 
+interface MediaDataItem {
+    data?: string;
+}
+
+interface PostCommentPreview {
+    id?: string | number;
+    profile_picture?: string;
+    full_name?: string;
+    username?: string;
+    content?: string;
+    text?: string;
+    timestamp?: string | number;
+}
+
+interface PostPartyRef {
+    party_name?: string;
+}
+
 interface Post {
     id: number;
     user: User;
     username: string;
     profile_picture: string;
     content: string;
-    images: any[];
-    videos: any[];
+    images: MediaDataItem[];
+    videos: MediaDataItem[];
     is_anonymous: boolean;
     user_data?: { username: string; fullName: string; profilePicture: string };
     created_at: string;
     updated_at: string;
     upvotes: number;
     downvotes: number;
-    comments: any[];
-    parties?: any[];
+    comments: PostCommentPreview[];
+    parties?: PostPartyRef[];
 }
 
 interface GetPostsResponse {
@@ -429,7 +447,13 @@ export default function PodcastsPage() {
                                     type="text"
                                     placeholder="Search..."
                                     className="pl-10 w-full placeholder:hidden md:placeholder:block"
-                                    onClick={() => { typeof window !== 'undefined' && window.innerWidth < 600 ? router.push("/home/search") : setSearchQueryModal(true) }}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && window.innerWidth < 600) {
+                                            router.push("/home/search");
+                                        } else {
+                                            setSearchQueryModal(true);
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
@@ -679,11 +703,11 @@ export default function PodcastsPage() {
                                         <>
                                             <div className="space-y-4">
                                                 {myPosts.map((post) => {
-                                                    const extractAndCategorizeMedia = (mediaArray: any[]) => {
+                                                    const extractAndCategorizeMedia = (mediaArray: MediaDataItem[]) => {
                                                         if (!mediaArray || !Array.isArray(mediaArray)) return { images: [] as string[], videos: [] as string[] };
                                                         const images: string[] = [];
                                                         const videos: string[] = [];
-                                                        mediaArray.forEach((item: any) => {
+                                                        mediaArray.forEach((item: MediaDataItem) => {
                                                             if (item?.data && typeof item.data === 'string' && item.data.startsWith('data:')) {
                                                                 const mime = item.data.split(';')[0].split(':')[1];
                                                                 if (mime?.startsWith('image/')) images.push(item.data);
@@ -900,7 +924,7 @@ export default function PodcastsPage() {
                             <div className="p-4 pb-0 flex-1 flex flex-col min-h-0">
                                 <div ref={commentsListRef} className="space-y-4 flex-1 overflow-y-auto min-h-0 pr-2">
                                     {selectedPostForComment?.comments && selectedPostForComment.comments.length > 0 ? (
-                                        selectedPostForComment.comments.map((comment: any, index: number) => (
+                                        selectedPostForComment.comments.map((comment: PostCommentPreview, index: number) => (
                                             <div key={comment.id ?? index} className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                                                 <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
                                                     {comment.profile_picture ? (

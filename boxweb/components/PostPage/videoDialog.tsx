@@ -2,6 +2,11 @@
 
 import React, { useState } from 'react';
 import { Editor } from '@tiptap/react';
+
+type EditorChain = ReturnType<Editor['chain']>;
+type ChainWithVideo = EditorChain & {
+    setVideo: (attrs: { src: string; title: string }) => EditorChain;
+};
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -41,11 +46,10 @@ const VideoDialog = ({ editor, open, onOpenChange }: { editor: Editor | null, op
             // Here you would typically upload the file to your server/storage
             // For now, we'll create a local URL for demonstration
             const fileUrl = URL.createObjectURL(selectedFile);
-            
-            editor
-                .chain()
-                .focus()
-                .setVideo({ 
+
+            const chain = editor.chain().focus() as ChainWithVideo;
+            chain
+                .setVideo({
                     src: fileUrl,
                     title: selectedFile.name,
                 })

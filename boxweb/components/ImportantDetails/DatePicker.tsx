@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Picker from "react-mobile-picker";
-import { format, addYears, subYears } from "date-fns";
+import { format, subYears } from "date-fns";
 import { Label } from "@radix-ui/react-label";
 
 // Define option interface
@@ -57,21 +57,6 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
     }));
   };
 
-  // Update date state
-  const handleChange = (value: { year: string; month: string; day: string }, key: string) => {
-    // Convert string values to numbers
-    let year = parseInt(value.year);
-    let month = parseInt(value.month);
-    let day = parseInt(value.day);
-    // Adjust invalid dates (e.g., Feb 30 -> Feb 28)
-    const daysInMonth = new Date(year, month, 0).getDate();
-    if (day > daysInMonth) day = daysInMonth;
-    const newDate = { year, month, day };
-    setDate(newDate);
-    const formatted = `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    onChange(formatted);
-  };
-
   return (
     <div className="flex flex-col items-center p-4 min-h-[300px]" role="dialog" aria-label="Date picker">
       <Label className="text-lg font-playfair-display font-semibold">Birth Date</Label>
@@ -83,8 +68,8 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
             day: date.day.toString(),
           }}
           onChange={(nextValue) => {
-            let year = parseInt(nextValue.year);
-            let month = parseInt(nextValue.month);
+            const year = parseInt(nextValue.year);
+            const month = parseInt(nextValue.month);
             let day = parseInt(nextValue.day);
             const daysInMonth = new Date(year, month, 0).getDate();
             if (day > daysInMonth) day = daysInMonth;

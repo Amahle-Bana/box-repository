@@ -44,8 +44,7 @@ const notificationCategories = [
     "Likes",
 ]
 
-
-
+const USERNAME_REGEX = /^[a-z0-9_]+$/;
 
 export default function EditProfile() {
     const [username, setUsername] = useState("");
@@ -94,9 +93,6 @@ export default function EditProfile() {
 
     const router = useRouter();
 
-    // Username validation regex
-    const usernameRegex = /^[a-z0-9_]+$/;
-
     // Username Availability Checker
     const checkUsernameAvailability = useCallback(async (username: string) => {
         // Convert username to lowercase
@@ -114,7 +110,7 @@ export default function EditProfile() {
         }
 
         // Check for special characters
-        if (!usernameRegex.test(lowercaseUsername)) {
+        if (!USERNAME_REGEX.test(lowercaseUsername)) {
             setHasSpecialChars(true);
             setIsUsernameAvailable(null);
             setIsCheckingUsername(false);
@@ -300,7 +296,7 @@ export default function EditProfile() {
                 return;
             }
 
-            if (!usernameRegex.test(lowercaseUsername)) {
+            if (!USERNAME_REGEX.test(lowercaseUsername)) {
                 setHasSpecialChars(true);
                 setHasUsernameSpaces(false);
                 setIsUsernameAvailable(null);
@@ -378,7 +374,13 @@ export default function EditProfile() {
                                             type="text"
                                             placeholder="Search..."
                                             className="pl-10 w-full placeholder:hidden md:placeholder:block"
-                                            onClick={() => { typeof window !== 'undefined' && window.innerWidth < 600 ? router.push("/home/search") : setSearchQueryModal(true) }}
+                                            onClick={() => {
+                                                if (typeof window !== 'undefined' && window.innerWidth < 600) {
+                                                    router.push("/home/search");
+                                                } else {
+                                                    setSearchQueryModal(true);
+                                                }
+                                            }}
                                         />
                                     </div>
                                 </div>

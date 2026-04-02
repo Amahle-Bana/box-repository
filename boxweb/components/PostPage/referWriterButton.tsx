@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { UserPlus } from 'lucide-react';
 
 // Refer Writer Button Component
-export default function ReferWriterButtonComponent(props: NodeViewProps) {
+export default function ReferWriterButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="refer-writer-react-component flex justify-center items-center my-4">
       <Button

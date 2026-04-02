@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Send } from 'lucide-react';
 
 // Send Message Button Component
-export default function SendMessageButtonComponent(props: NodeViewProps) {
+export default function SendMessageButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="send-message-react-component flex justify-center items-center my-4">
       <Button

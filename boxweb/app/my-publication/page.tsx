@@ -238,7 +238,7 @@ export default function HomePage() {
                     {/* Middle - Search Bar */}
                     {typeof window !== 'undefined' && window.innerWidth >= 500 ? (
                         <div className="flex flex-row align-items justify-center max-w-xl mx-2 bg-background">
-                            <h1 className="text-bold">Amahle Bana's Soma</h1>
+                            <h1 className="text-bold">{"Amahle Bana's Soma"}</h1>
                         </div>
                     ) : (
                         <Link href="/home/search" className="ml-auto mr-2">
@@ -1884,7 +1884,7 @@ export default function HomePage() {
                                             <div className="flex items-center justify-between mb-2">
                                                 <div>
                                                     <div className="font-semibold">Allow readers to pledge subscriptions</div>
-                                                    <div className="text-sm text-muted-foreground max-w-lg">When turned on, readers of Amahle's Substack will be able to pledge to pay for a future paid subscription to Amahle's Substack</div>
+                                                    <div className="text-sm text-muted-foreground max-w-lg">{`When turned on, readers of Amahle's Substack will be able to pledge to pay for a future paid subscription to Amahle's Substack`}</div>
                                                 </div>
                                                 {/* Toggle Switch (placeholder) */}
                                                 <button type="button" className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 transition focus:outline-none">
@@ -2008,7 +2008,7 @@ export default function HomePage() {
                                             {/* Email sender name */}
                                             <div className="mb-6">
                                                 <div className="font-semibold mb-1">Email sender name</div>
-                                                <div className="text-sm text-muted-foreground mb-2">The name that appears in the "from" field of your emails.</div>
+                                                <div className="text-sm text-muted-foreground mb-2">{`The name that appears in the "from" field of your emails.`}</div>
                                                 <input
                                                     type="text"
                                                     className="w-full rounded-md border border-gray-700 bg-background text-primary px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
@@ -2140,7 +2140,7 @@ export default function HomePage() {
                                             <div className="flex items-center justify-between mb-4">
                                                 <div>
                                                     <div className="font-semibold">Who can reply to your emails?</div>
-                                                    <div className="text-sm text-muted-foreground">Substack will only allow email replies and direct emails to amahlebana@substack.com from the audience you select. "Verified subscribers" are users whose behavior suggests they are real people rather than bots.</div>
+                                                    <div className="text-sm text-muted-foreground">{`Substack will only allow email replies and direct emails to amahlebana@substack.com from the audience you select. "Verified subscribers" are users whose behavior suggests they are real people rather than bots.`}</div>
                                                 </div>
                                                 <select className="rounded-md border border-gray-700 bg-background text-primary px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                                     <option>Subscribers</option>
@@ -2615,7 +2615,7 @@ export default function HomePage() {
                                         {/* Use your domain on Bluesky */}
                                         <div className="mb-4">
                                             <div className="font-semibold">Use your domain on Bluesky</div>
-                                            <div className="text-sm text-muted-foreground">To claim <a href="https://amahlebana.substack.com" className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">@amahlebana.substack.com</a> as your handle on Bluesky, tap "Copy domain value" in the "Change my handle" section of the Bluesky settings, then paste it into the box below. <a href="#" className="underline">Learn more</a></div>
+                                            <div className="text-sm text-muted-foreground">To claim <a href="https://amahlebana.substack.com" className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">@amahlebana.substack.com</a>{` as your handle on Bluesky, tap "Copy domain value" in the "Change my handle" section of the Bluesky settings, then paste it into the box below. `}<a href="#" className="underline">Learn more</a></div>
                                         </div>
                                         <div className="flex items-center gap-4 bg-[#232323] rounded-lg p-4">
                                             <input
@@ -2664,7 +2664,7 @@ export default function HomePage() {
                                                 value="amahlebana@substack.com"
                                                 readOnly
                                             />
-                                            <div className="text-sm text-muted-foreground">The email displayed on your RSS feeds. By default, we'll use your publication's Substack email (amahlebana@substack.com). Any email sent to this address is forwarded to the publication owner based on the "receive email replies from" setting above.</div>
+                                            <div className="text-sm text-muted-foreground">{`The email displayed on your RSS feeds. By default, we'll use your publication's Substack email (amahlebana@substack.com). Any email sent to this address is forwarded to the publication owner based on the "receive email replies from" setting above.`}</div>
                                         </div>
                                         {/* Publication introduction */}
                                         <div className="flex items-center justify-between mb-4">
@@ -2700,7 +2700,7 @@ export default function HomePage() {
                                             <div className="flex items-center justify-between">
                                                 <div>
                                                     <div className="font-semibold">Export your data</div>
-                                                    <div className="text-sm text-muted-foreground">Export your posts, subscriber list, and related data. We'll send you an email when your export is ready to download.</div>
+                                                    <div className="text-sm text-muted-foreground">{`Export your posts, subscriber list, and related data. We'll send you an email when your export is ready to download.`}</div>
                                                 </div>
                                                 <button type="button" className="bg-[#444] hover:bg-[#333] text-white font-semibold px-6 py-2 rounded-lg text-base shadow-md transition">New export</button>
                                             </div>

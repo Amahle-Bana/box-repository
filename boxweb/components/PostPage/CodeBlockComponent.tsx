@@ -15,11 +15,6 @@ const CodeBlockComponent = ({ node, updateAttributes, extension }: NodeViewProps
         }, 3000)
     }
 
-    // Split the content into lines and create line numbers
-    const content = node.textContent
-    const lines = content.split('\n')
-    const lineNumbers = lines.map((_, index) => index + 1)
-
     return (
         <NodeViewWrapper className="code-block font-playfair-display text-primary bg-gray-800 rounded-md p-2 w-full border-2 border-secondary">
             <div className="flex justify-between items-center">

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Playfair_Display, Playfair, Comfortaa } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
-import { AuthProvider } from '../context/auth-context';
 import '../styles/codeBlockStyle.css'
 import { Providers } from '@/context/auth-provider';
 

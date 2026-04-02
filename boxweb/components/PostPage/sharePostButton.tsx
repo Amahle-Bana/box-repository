@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Share2 } from 'lucide-react';
 
 // Share Post Button Component
-export default function SharePostButtonComponent(props: NodeViewProps) {
+export default function SharePostButtonComponent(_props: NodeViewProps) {
   return (
     <NodeViewWrapper className="share-post-react-component flex justify-center items-center my-4">
       <Button

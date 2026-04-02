@@ -48,19 +48,34 @@ interface User {
     [key: string]: unknown;
 }
 
+interface MediaDataItem {
+    data?: string;
+}
+
+interface PostCommentPreview {
+    id?: string | number;
+    profile_picture?: string;
+    full_name?: string;
+    username?: string;
+    content?: string;
+    text?: string;
+    created_at?: string;
+    timestamp?: string | number;
+}
+
 interface Post {
     id: number;
     user: User;
     username: string;
     profile_picture: string;
     content: string;
-    images: any[];
-    videos: any[];
+    images: MediaDataItem[];
+    videos: MediaDataItem[];
     is_anonymous: boolean;
     created_at: string;
     upvotes: number;
     downvotes: number;
-    comments: any[];
+    comments: PostCommentPreview[];
 }
 
 interface ProfileUser {
@@ -149,7 +164,7 @@ export default function UserProfileByIdPage() {
     const commentsListRef = useRef<HTMLDivElement>(null);
 
     const router = useRouter();
-    const { setTheme } = useTheme();
+    const { setTheme, theme } = useTheme();
     const currentUser = useAppSelector((state) => state.user);
     const queryClient = useQueryClient();
     const isOwnProfile = currentUser?.id != null && currentUser.id === userId;
@@ -319,7 +334,6 @@ export default function UserProfileByIdPage() {
         );
     }
 
-    const { theme } = useTheme();
     const profile = profileData;
 
     return (
@@ -601,12 +615,12 @@ export default function UserProfileByIdPage() {
                                             <>
                                                 <div className="space-y-4">
                                                     {posts.map((post) => {
-                                                        const extractAndCategorizeMedia = (mediaArray: any[]) => {
+                                                        const extractAndCategorizeMedia = (mediaArray: MediaDataItem[]) => {
                                                             if (!mediaArray || !Array.isArray(mediaArray))
                                                                 return { images: [] as string[], videos: [] as string[] };
                                                             const images: string[] = [];
                                                             const videos: string[] = [];
-                                                            mediaArray.forEach((item: any) => {
+                                                            mediaArray.forEach((item: MediaDataItem) => {
                                                                 if (
                                                                     item?.data &&
                                                                     typeof item.data === 'string' &&
@@ -868,7 +882,7 @@ export default function UserProfileByIdPage() {
                         <div className="p-4 pb-0 flex-1 flex flex-col min-h-0">
                             <div ref={commentsListRef} className="space-y-4 flex-1 overflow-y-auto min-h-0 pr-2">
                                 {selectedPostForComment?.comments && selectedPostForComment.comments.length > 0 ? (
-                                    selectedPostForComment.comments.map((comment: any, index: number) => (
+                                    selectedPostForComment.comments.map((comment: PostCommentPreview, index: number) => (
                                         <div
                                             key={comment.id ?? index}
                                             className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"

@@ -154,7 +154,7 @@ export default function TermsOfService() {
                             10. Election Results and Appeals
                         </h2>
                         <p className="text-primary leading-relaxed font-playfair-display">
-                            Election results are determined by the university's election committee and are final unless appealed through the proper university channels. The voting platform provides technical support for the voting process but does not determine election outcomes.
+                            Election results are determined by the university&apos;s election committee and are final unless appealed through the proper university channels. The voting platform provides technical support for the voting process but does not determine election outcomes.
                         </p>
                     </section>
 

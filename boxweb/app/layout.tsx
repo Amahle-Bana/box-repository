@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import '../styles/codeBlockStyle.css'
 import { Providers } from './providers';
+import { TrackImpressions } from '@/components/track-impressions';
 
 // Playfair Font For Article Headings
 const playfair = Playfair({
@@ -31,18 +32,6 @@ export const metadata: Metadata = {
     description: "The Campus Square",
 };
 
-// Example: Call this when user opens the app
-fetch('http://localhost:8000/somaapp/track-impressions/', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-})
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-
-
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -54,6 +43,7 @@ export default function RootLayout({
                 className={`${comfortaa.variable} antialiased `}
             >
                 <Providers>
+                    <TrackImpressions />
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="light"

@@ -1,19 +1,20 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import userReducer from './user-store/userSlice';;
+import userReducer from './user-store/userSlice';
+import createPublicationReducer from './create-publication-store/createPublicationSlice';
 
 // 1. Combine reducers if you have more than one
 const rootReducer = combineReducers({
     user: userReducer,
-    // add other reducers here
+    createPublication: createPublicationReducer,
 });
 
 // 2. Set up persist config
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['user'], // only persist the user and createPublication slices
+    whitelist: ['user', 'createPublication'],
 };
 
 // 3. Create a persisted reducer

@@ -16,7 +16,7 @@ const CreateContentDialog = ({ showCreateModal, setShowCreateModal }: CreateCont
         >
             <DialogContent className="sm:max-w-[500px] max-w-[380px] rounded-lg">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">What's On Your Mind?</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold">{"What's On Your Mind?"}</DialogTitle>
                 </DialogHeader>
 
                 <div className="flex flex-col gap-3">

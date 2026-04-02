@@ -77,7 +77,7 @@ interface Candidate {
     candidate_name: string;
     manifesto?: string;
     votes: number;
-    supporters: any[];
+    supporters: unknown[];
     supporters_count: number;
     department?: string;
     structure?: string;
@@ -107,14 +107,26 @@ interface GetCandidatesResponse {
 }
 
 // Interface for Post data from backend
+interface PostComment {
+    id?: string | number;
+    profile_picture?: string;
+    full_name?: string;
+    username?: string;
+    content?: string;
+    text?: string;
+    timestamp?: string | number;
+}
+
+type PostMediaItem = string | { data?: string };
+
 interface Post {
     id: number;
     user: User;
     username: string;
     profile_picture: string;
     content: string;
-    images: string[];
-    videos: string[];
+    images: PostMediaItem[];
+    videos: PostMediaItem[];
     is_anonymous: boolean;
     user_data: {
         username: string;
@@ -126,8 +138,8 @@ interface Post {
     updated_at: string;
     upvotes: number;
     downvotes: number;
-    comments: any[];
-    parties?: any[]; // Parties associated with the post
+    comments: PostComment[];
+    parties?: Party[];
 }
 
 // Interface for Posts API response
@@ -150,7 +162,7 @@ interface Party {
     party_name: string;
     manifesto?: string;
     votes: number;
-    supporters: any[];
+    supporters: unknown[];
     supporters_count: number;
     party_leader?: string;
     structure?: string;
@@ -1109,7 +1121,13 @@ export default function HomePage() {
                                     type="text"
                                     placeholder="Search..."
                                     className="pl-10 w-full placeholder:hidden md:placeholder:block"
-                                    onClick={() => { typeof window !== 'undefined' && window.innerWidth < 600 ? router.push("/home/search") : setSearchQueryModal(true) }}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && window.innerWidth < 600) {
+                                            router.push("/home/search");
+                                        } else {
+                                            setSearchQueryModal(true);
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
@@ -1351,7 +1369,7 @@ export default function HomePage() {
                                     )}
                                 </div>
                                 <p className="text-gray-600">
-                                    What's Happening On Campus?
+                                    {"What's Happening On Campus?"}
                                 </p>
                             </div>
                         </motion.div>
@@ -1435,7 +1453,7 @@ export default function HomePage() {
 
                                 // Check if post has parties and if any party matches the active category
                                 if (post.parties && post.parties.length > 0) {
-                                    return post.parties.some((party: any) =>
+                                    return post.parties.some((party) =>
                                         party.party_name === activeCategory
                                     );
                                 }
@@ -1540,25 +1558,30 @@ export default function HomePage() {
                                         <div className="relative" onClick={(e) => e.stopPropagation()}>
                                             {(() => {
                                                 // Extract base64 data from media objects and categorize by type
-                                                const extractAndCategorizeMedia = (mediaArray: any[]) => {
+                                                const extractAndCategorizeMedia = (
+                                                    mediaArray: PostMediaItem[] | null | undefined
+                                                ) => {
                                                     if (!mediaArray || !Array.isArray(mediaArray)) return { images: [], videos: [] };
 
                                                     const images: string[] = [];
                                                     const videos: string[] = [];
 
-                                                    mediaArray.forEach(item => {
-                                                        if (item && item.data && typeof item.data === 'string') {
-                                                            const dataUrl = item.data;
-                                                            // Check if it's a valid data URL
-                                                            if (dataUrl.startsWith('data:')) {
-                                                                const mimeType = dataUrl.split(';')[0].split(':')[1];
+                                                    mediaArray.forEach((item) => {
+                                                        const dataUrl =
+                                                            typeof item === 'string'
+                                                                ? item
+                                                                : item && typeof item === 'object'
+                                                                  ? item.data
+                                                                  : undefined;
+                                                        if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:')) {
+                                                            return;
+                                                        }
+                                                        const mimeType = dataUrl.split(';')[0].split(':')[1];
 
-                                                                if (mimeType.startsWith('image/')) {
-                                                                    images.push(dataUrl);
-                                                                } else if (mimeType.startsWith('video/')) {
-                                                                    videos.push(dataUrl);
-                                                                }
-                                                            }
+                                                        if (mimeType.startsWith('image/')) {
+                                                            images.push(dataUrl);
+                                                        } else if (mimeType.startsWith('video/')) {
+                                                            videos.push(dataUrl);
                                                         }
                                                     });
 
@@ -1704,7 +1727,7 @@ export default function HomePage() {
                         {/* End of posts indicator */}
                         {!displayIsLoadingPosts && !isPostsError && !hasNextPage && displayPosts.length > 0 && (
                             <div className="text-center py-6">
-                                <p className="text-muted-foreground text-sm">You've reached the end of the posts</p>
+                                <p className="text-muted-foreground text-sm">{"You've reached the end of the posts"}</p>
                             </div>
                         )}
 
@@ -1899,7 +1922,7 @@ export default function HomePage() {
                             {/* Comments List */}
                             <div ref={commentsListRef} className="space-y-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 min-h-0 pr-2 scroll-smooth">
                                 {selectedPostForComment?.comments && selectedPostForComment.comments.length > 0 ? (
-                                    selectedPostForComment.comments.map((comment: any, index: number) => (
+                                    selectedPostForComment.comments.map((comment: PostComment, index: number) => (
                                         <div key={comment.id || index} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
                                             <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
                                                 {comment.profile_picture ? (

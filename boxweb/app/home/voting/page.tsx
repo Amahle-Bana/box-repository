@@ -114,6 +114,14 @@ interface GetUsersResponse {
     users: User[];
 }
 
+interface PostComment {
+    id?: string | number;
+    profile_picture?: string;
+    full_name?: string;
+    username?: string;
+    content?: string;
+}
+
 // Interface for Post data from backend
 interface Post {
     id: number;
@@ -134,7 +142,7 @@ interface Post {
     updated_at: string;
     upvotes: number;
     downvotes: number;
-    comments: any[];
+    comments: PostComment[];
 }
 
 // Interface for Posts API response
@@ -150,7 +158,7 @@ interface Party {
     party_name: string;
     manifesto?: string;
     votes: number;
-    supporters: any[];
+    supporters: unknown[];
     supporters_count: number;
     party_leader?: string;
     structure?: string;
@@ -567,7 +575,13 @@ export default function MagazinesPage() {
                                     type="text"
                                     placeholder="Search..."
                                     className="pl-10 w-full placeholder:hidden md:placeholder:block"
-                                    onClick={() => { typeof window !== 'undefined' && window.innerWidth < 600 ? router.push("/home/search") : setSearchQueryModal(true) }}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && window.innerWidth < 600) {
+                                            router.push("/home/search");
+                                        } else {
+                                            setSearchQueryModal(true);
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
@@ -946,11 +960,11 @@ export default function MagazinesPage() {
                                 <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
                                     <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">Voting Instructions</h3>
                                     <div className="text-sm text-blue-700 dark:text-blue-300 space-y-2">
-                                        <p>• Click on the "Vote for [Party Name]" button to cast your vote</p>
+                                        <p>• Click on the &quot;Vote for [Party Name]&quot; button to cast your vote</p>
                                         <p>• You can only vote once per election</p>
                                         <p>• Your vote is confidential and secure</p>
                                         <p>• Results will be announced after the voting period ends</p>
-                                        <p>• Make sure to read each party's manifesto before voting</p>
+                                        <p>• Make sure to read each party&apos;s manifesto before voting</p>
                                     </div>
                                 </div>
                             </div>

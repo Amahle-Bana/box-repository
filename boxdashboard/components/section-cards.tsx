@@ -202,7 +202,7 @@ export function SectionCards() {
                     fetchPartyStats(),
                     fetchCandidateStats()
                 ])
-            } catch (error) {
+            } catch {
                 // console.error('Error fetching statistics:', error)
             } finally {
                 setLoading(false)

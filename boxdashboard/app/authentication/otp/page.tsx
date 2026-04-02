@@ -5,18 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 import Link from "next/link"
-import { SyntheticEvent, useState, useEffect } from "react"
+import Image from "next/image"
+import { SyntheticEvent, useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ClipLoader } from 'react-spinners';
-import { CheckCircle2, XCircle, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { useAuth } from "@/context/auth-context";
 import { useTheme } from "next-themes";
 
-export default function OTPVerificationPage() {
+function OTPVerificationPageContent() {
     // Get email from URL parameters
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || '';
-    const mode = searchParams.get('mode') || 'login';
 
     // State Variables
     const [otp, setOtp] = useState("");
@@ -30,7 +30,7 @@ export default function OTPVerificationPage() {
     const { verifyOTP, resendOTP, refreshUserData } = useAuth();
 
     // Theme support
-    const { theme, resolvedTheme } = useTheme();
+    const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export default function OTPVerificationPage() {
                     setErrorMessage(result.message);
                 }
             })
-            .catch((error: any) => {
+            .catch(() => {
                 setErrorMessage('An error occurred during OTP verification');
             })
             .finally(() => {
@@ -89,7 +89,7 @@ export default function OTPVerificationPage() {
                     setResendMessage(result.message);
                 }
             })
-            .catch((error: any) => {
+            .catch(() => {
                 setResendMessage('An error occurred while resending OTP');
             })
             .finally(() => {
@@ -108,13 +108,15 @@ export default function OTPVerificationPage() {
                 <CardHeader className="text-center">
                     <div className="flex flex-col gap-4 items-center">
                         {mounted && (
-                            <img
+                            <Image
                                 src={
                                     theme === "dark"
                                         ? "/icons8-light-box-480.png"
                                         : "/icons8-box-480.png"
                                 }
                                 alt="Box Dashboard logo"
+                                width={120}
+                                height={120}
                                 className="w-30 h-30 object-contain"
                             />
                         )}
@@ -210,5 +212,19 @@ export default function OTPVerificationPage() {
                 and <Link href="/termsOfService" className="underline underline-offset-4">Terms of Service</Link>.
             </div>
         </div>
+    )
+}
+
+export default function OTPVerificationPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className={cn("min-h-screen flex items-center justify-center p-4")}>
+                    <ClipLoader color="var(--primary)" size={32} />
+                </div>
+            }
+        >
+            <OTPVerificationPageContent />
+        </Suspense>
     )
 }

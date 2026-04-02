@@ -7,6 +7,18 @@ import Link from "next/link";
 import { useAuth } from "@/context/auth-context";
 import { Compass } from "lucide-react";
 
+interface SearchPostResult {
+    id: string | number;
+    profile_picture?: string;
+    username?: string;
+    is_anonymous?: boolean;
+    created_at: string;
+    content: string;
+    upvotes?: number;
+    downvotes?: number;
+    comments?: unknown[];
+}
+
 interface SearchQueryDialogProps {
     searchQueryModal: boolean;
     setSearchQueryModal: (show: boolean) => void;
@@ -25,7 +37,7 @@ export function SearchQueryDialog({
     const searchCategoriesScrollRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchResults, setSearchResults] = useState<SearchPostResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -75,7 +87,7 @@ export function SearchQueryDialog({
     };
 
     // Handle clicking on a post
-    const handlePostClick = (post: any) => {
+    const handlePostClick = (post: SearchPostResult) => {
         // Close the search modal
         setSearchQueryModal(false);
         // Navigate to the post details page
@@ -143,14 +155,14 @@ export function SearchQueryDialog({
 
                             {!isLoading && !error && searchQuery && searchResults.length === 0 && (
                                 <div className="p-3 text-center text-gray-500">
-                                    No posts found for "{searchQuery}"
+                                    {`No posts found for "${searchQuery}"`}
                                 </div>
                             )}
 
                             {!isLoading && searchResults.length > 0 && (
                                 <div className="space-y-4">
                                     <div className="text-sm text-gray-600 px-3">
-                                        Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} for "{searchQuery}"
+                                        {`Found ${searchResults.length} result${searchResults.length !== 1 ? 's' : ''} for "${searchQuery}"`}
                                     </div>
                                     {searchResults.map((post) => (
                                         <div

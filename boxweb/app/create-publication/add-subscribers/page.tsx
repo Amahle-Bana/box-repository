@@ -148,7 +148,7 @@ export default function AddSubscribersPage() {
                     <Button onClick={() => router.push('./publication-category/')} className="w-full mt-2 bg-background border text-primary hover:bg-background/70 cursor-pointer">
                         Skip
                     </Button>
-                    <p className="text-gray-600 mt-2">They Won't Get Notified You Add Them To Your E-mail List</p>
+                    <p className="text-gray-600 mt-2">{"They Won't Get Notified You Add Them To Your E-mail List"}</p>
                 </div>
             </main>
         </div>

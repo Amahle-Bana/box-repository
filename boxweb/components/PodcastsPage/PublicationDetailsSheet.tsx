@@ -3,10 +3,26 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import Image from "next/image"
 
+export type PodcastsPublicationSummary = {
+    name: string
+    icon: string
+    author: string
+    Subscribers: string | number
+    description: string
+}
+
+interface PodcastsArticlePreview {
+    title: string
+    subtitle: string
+    publisher: { name: string }
+    readTime?: string
+    date?: string
+}
+
 interface PublicationDetailsSheetProps {
-    selectedPublication: any
-    setSelectedPublication: (publication: any) => void
-    articles: any[]
+    selectedPublication: PodcastsPublicationSummary | null
+    setSelectedPublication: (publication: PodcastsPublicationSummary | null) => void
+    articles: PodcastsArticlePreview[]
 }
 
 const PublicationDetailsSheet = ({ selectedPublication, setSelectedPublication, articles }: PublicationDetailsSheetProps) => {

@@ -28,7 +28,6 @@ import {
   IconChevronsLeft,
   IconChevronsRight,
   IconDotsVertical,
-  IconGripVertical,
   IconLayoutColumns,
   IconLoader,
 } from "@tabler/icons-react"
@@ -54,9 +53,6 @@ import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  ChartConfig,
-} from "@/components/ui/chart"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Drawer,
@@ -132,28 +128,6 @@ export const schema = z.object({
   downvotes: z.number().optional(),
   comments: z.array(z.any()).optional().default([]),
 })
-
-// Create a separate component for the drag handle
-function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({
-    id,
-  })
-
-  return (
-    <Button
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="text-muted-foreground size-7 hover:bg-transparent"
-    >
-      <IconGripVertical className="text-muted-foreground size-3" />
-      <span className="sr-only">Drag to reorder</span>
-    </Button>
-  )
-}
-
-
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -451,8 +425,7 @@ export function DataTable({
       // console.log('Delete post - Response ok:', response.ok)
 
       if (response.ok) {
-        const result = await response.json()
-        // console.log('Delete post - Success response:', result)
+        await response.json()
         toast.success('Post deleted successfully')
 
               // Remove the post from the local state
@@ -467,14 +440,14 @@ export function DataTable({
         try {
           errorResult = await response.json()
           // console.log('Delete post - Error response:', errorResult)
-        } catch (e) {
+        } catch {
           // console.log('Delete post - Could not parse error response as JSON')
           errorResult = { error: `HTTP ${response.status}: ${response.statusText}` }
         }
         // console.error('Delete post failed with status:', response.status, 'Response:', errorResult)
         toast.error(errorResult.error || 'Failed to delete post')
       }
-    } catch (error) {
+    } catch {
       toast.error('Network error. Please try again.')
     } finally {
       // console.log('Delete post process completed for post ID:', postId)
@@ -507,17 +480,15 @@ export function DataTable({
         })
 
         // console.log('Response status:', response.status)
-        const result = await response.json()
-        // console.log('Response:', result)
-      } catch (error) {
+        await response.json()
+      } catch {
       }
     }
 
     window.checkAuthStatus = () => {
       // console.log('=== Checking Authentication Status ===')
-      const token = localStorage.getItem('jwt_token')
-      // console.log('JWT Token exists:', !!token)
-      // console.log('Token (first 20 chars):', token ? token.substring(0, 20) + '...' : 'null')
+      // console.log('JWT Token exists:', !!localStorage.getItem('jwt_token'))
+      // console.log('Token (first 20 chars):', localStorage.getItem('jwt_token') ? localStorage.getItem('jwt_token')!.substring(0, 20) + '...' : 'null')
       // console.log('All localStorage keys:', Object.keys(localStorage))
     }
 
@@ -525,8 +496,7 @@ export function DataTable({
       // console.log('=== Testing Get Posts API ===')
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/somaapp/get-all-posts/`)
       // console.log('Response status:', response.status)
-      const result = await response.json()
-      // console.log('Response:', result)
+      await response.json()
     }
   }, [])
 
@@ -741,26 +711,6 @@ export function DataTable({
     </Tabs>
   )
 }
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
-  },
-} satisfies ChartConfig
 
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   const isMobile = useIsMobile()

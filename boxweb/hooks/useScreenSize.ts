@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react';
 export const useScreenSize = () => {
     const [isMedium, setIsMedium] = useState(false);
     const [isSmall, setIsSmall] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const checkScreenSize = () => {
-            setIsMedium(window.innerWidth <= 1440);
-            setIsSmall(window.innerWidth <= 700);
+            const w = window.innerWidth;
+            setIsMedium(w <= 1440);
+            setIsSmall(w <= 700);
+            setIsMobile(w < 768);
         };
 
         // Initial check
@@ -20,5 +23,5 @@ export const useScreenSize = () => {
         return () => window.removeEventListener('resize', checkScreenSize);
     }, []);
 
-    return { isSmall, isMedium };
+    return { isSmall, isMedium, isMobile };
 }; 

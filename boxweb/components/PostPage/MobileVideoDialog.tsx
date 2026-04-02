@@ -41,11 +41,13 @@ const VideoDialog = ({ editor, open, onOpenChange }: { editor: Editor | null, op
             // Here you would typically upload the file to your server/storage
             // For now, we'll create a local URL for demonstration
             const fileUrl = URL.createObjectURL(selectedFile);
-            
-            editor
-                .chain()
-                .focus()
-                .setVideo({ 
+
+            type Chain = ReturnType<Editor['chain']>;
+            const chain = editor.chain().focus() as Chain & {
+                setVideo: (attrs: { src: string; title: string }) => Chain;
+            };
+            chain
+                .setVideo({
                     src: fileUrl,
                     title: selectedFile.name,
                 })

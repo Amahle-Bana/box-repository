@@ -28,6 +28,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
+interface PartyListItem {
+    id: number;
+    party_name: string;
+}
+
+interface PostMediaPayload {
+    name: string;
+    type: string;
+    size: number;
+    data: string;
+}
+
 const categories = [
     'All',
     'Technology',
@@ -123,7 +135,7 @@ export default function AddPage() {
 
     // Party selection state
     const [audience, setAudience] = useState('');
-    const [parties, setParties] = useState<any[]>([]);
+    const [parties, setParties] = useState<PartyListItem[]>([]);
     const [selectedParties, setSelectedParties] = useState<number[]>([]);
     const [loadingParties, setLoadingParties] = useState(false);
 
@@ -279,8 +291,8 @@ export default function AddPage() {
                     return;
                 }
                 // For now, let's test without media files to debug the basic functionality
-                let images: any[] = [];
-                let videos: any[] = [];
+                let images: PostMediaPayload[] = [];
+                let videos: PostMediaPayload[] = [];
 
                 // Only process media files if there are any (to avoid issues)
                 if (uploadedImages.length > 0) {

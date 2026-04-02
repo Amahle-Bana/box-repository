@@ -6,7 +6,7 @@ export interface Candidate {
     candidate_name: string;
     manifesto?: string;
     votes: number;
-    supporters: any[];
+    supporters: unknown[];
     supporters_count: number;
     department?: string;
     structure?: string;
@@ -35,7 +35,7 @@ export interface Party {
     party_name: string;
     manifesto?: string;
     votes: number;
-    supporters: any[];
+    supporters: unknown[];
     supporters_count: number;
     party_leader?: string;
     structure?: string;

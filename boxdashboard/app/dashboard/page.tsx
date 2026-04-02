@@ -157,7 +157,7 @@ export default function Page() {
             } else {
                 setPartyMessage({ type: 'error', text: result.error || 'Failed to register party' })
             }
-        } catch (error) {
+        } catch {
             setPartyMessage({ type: 'error', text: 'Network error. Please try again.' })
         } finally {
             setIsPartySubmitting(false)
@@ -208,7 +208,7 @@ export default function Page() {
             } else {
                 setCandidateMessage({ type: 'error', text: result.error || 'Failed to register candidate' })
             }
-        } catch (error) {
+        } catch {
             setCandidateMessage({ type: 'error', text: 'Network error. Please try again.' })
         } finally {
             setIsCandidateSubmitting(false)
@@ -253,7 +253,7 @@ export default function Page() {
             } else {
                 setPartiesError('Failed to fetch parties')
             }
-        } catch (error) {
+        } catch {
             setPartiesError('Network error while fetching parties')
         } finally {
             setIsLoadingParties(false)
@@ -272,7 +272,7 @@ export default function Page() {
             } else {
                 setCandidatesError('Failed to fetch candidates')
             }
-        } catch (error) {
+        } catch {
             setCandidatesError('Network error while fetching candidates')
         } finally {
             setIsLoadingCandidates(false)
@@ -291,7 +291,7 @@ export default function Page() {
             } else {
                 setPostsError('Failed to fetch posts')
             }
-        } catch (error) {
+        } catch {
             setPostsError('Network error while fetching posts')
         } finally {
             setIsLoadingPosts(false)

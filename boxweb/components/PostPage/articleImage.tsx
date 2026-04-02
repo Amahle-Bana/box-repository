@@ -1,5 +1,4 @@
-import { Image } from 'lucide-react';
-import { Editor } from '@tiptap/react';
+import { Image as ImageIcon } from 'lucide-react';
 import ArticleImageDialog from './articleImageDialog';
 import { useState } from 'react';
 
@@ -38,8 +37,8 @@ export default function ArticleImage({
                     ) : (
                         <div className="flex flex-col items-center">
                             <div className="flex flex-row">
-                                <Image className="w-6 h-6 text-gray-400 mb-1 " />
-                                <img src="/sparkles2.png" alt="Sparkles" className="w-6 h-6 cursor-pointer rounded-sm" />
+                                <ImageIcon className="w-6 h-6 text-gray-400 mb-1 " />
+                                <img src="/sparkles2.png" alt="" className="w-6 h-6 cursor-pointer rounded-sm" />
                             </div>
                             <span className="text-xs text-gray-500 font-playfair-display">
                                 Click To Upload/Generate Image
